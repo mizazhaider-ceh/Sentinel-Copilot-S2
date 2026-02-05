@@ -236,6 +236,16 @@ export const StorageIDB = {
         return this._getAllByIndex('chunks', 'documentId', documentId);
     },
 
+    /**
+     * Get all chunks for a subject
+     * @param {string} subjectId - Subject identifier
+     * @returns {Promise<Array>} Chunks array
+     */
+    async getChunksBySubject(subjectId) {
+        await this.init();
+        return this._getAllByIndex('chunks', 'subjectId', subjectId);
+    },
+
     // ============ ANALYTICS OPERATIONS ============
 
     /**

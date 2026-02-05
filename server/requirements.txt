@@ -1,0 +1,27 @@
+# S2-Sentinel Copilot - Python RAG Backend
+# Install: pip install -r requirements.txt
+
+# Core Framework
+fastapi>=0.109.0
+uvicorn[standard]>=0.27.0
+python-multipart>=0.0.6
+
+# Vector Database & Embeddings
+chromadb>=0.4.22
+sentence-transformers>=2.3.0
+
+# PDF Processing
+PyMuPDF>=1.23.0
+
+# NLP for Smart Chunking
+spacy>=3.7.0
+
+# Security & Validation
+pydantic>=2.5.0
+python-dotenv>=1.0.0
+
+# CORS Support
+starlette>=0.35.0
+
+# Logging
+loguru>=0.7.2
