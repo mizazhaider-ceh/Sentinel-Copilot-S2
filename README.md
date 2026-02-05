@@ -4,7 +4,7 @@
 > Built specifically for Howest University Belgium
 
 ![Version](https://img.shields.io/badge/version-1.0.0-emerald)
-![Phase](https://img.shields.io/badge/phase-1%2F6-blue)
+![Phase](https://img.shields.io/badge/phase-3%2F6-blue)
 ![Courses](https://img.shields.io/badge/courses-7-purple)
 ![AI](https://img.shields.io/badge/AI-Cerebras%20%7C%20Gemini-orange)
 
@@ -66,14 +66,29 @@ Ask questions, use tools, take quizzes
 ## 🏗️ Development Status
 
 ### Phase 1: Foundation ✅ COMPLETE
-- [x] Project structure
+- [x] Project structure & SPA router
 - [x] 7 subjects configured with pedagogy styles
 - [x] IndexedDB storage (unlimited docs)
-- [x] State management
-- [x] SPA router
-- [x] UI shell & modals
+- [x] State management (reactive)
+- [x] UI shell, modals & components
 
-### Phase 2-6: In Progress
+### Phase 2: AI Integration ✅ COMPLETE
+- [x] Unified API layer (Cerebras + Gemini)
+- [x] Automatic failover between providers
+- [x] Response caching (memory + localStorage)
+- [x] Streaming support with real-time rendering
+- [x] Rate limiting & retry logic
+- [x] 5-layer subject prompt system
+
+### Phase 3: RAG Enhancement ✅ COMPLETE
+- [x] JavaScript TF-IDF engine (offline)
+- [x] Semantic text chunking
+- [x] Python backend with ChromaDB (optional)
+- [x] Sentence-transformers for embeddings
+- [x] Auto-detection (Python backend → JS fallback)
+- [x] PDF processing with PyMuPDF
+
+### Phase 4-6: Upcoming
 See [docs/DEVELOPMENT-PHASES.md](docs/DEVELOPMENT-PHASES.md) for full roadmap.
 
 ---
@@ -95,18 +110,63 @@ S2-Sentinel-Copilot/
 │   ├── state-manager.js    # Reactive state
 │   ├── features/
 │   │   ├── prompt-builder.js   # 5-layer prompts
-│   │   ├── rag-engine.js       # PDF processing
+│   │   ├── rag-engine.js       # TF-IDF + Python backend
 │   │   ├── toolkit.js          # Subject tools
 │   │   └── analytics.js        # Study tracking
 │   ├── services/
-│   │   ├── api.js              # AI providers
+│   │   ├── api.js              # AI providers (Cerebras/Gemini)
 │   │   └── storage-idb.js      # IndexedDB
 │   ├── views/
 │   │   ├── dashboard.js        # Subject grid
 │   │   └── workspace.js        # Chat interface
 │   └── ui/                     # UI utilities
+├── server/                     # Python RAG Backend (optional)
+│   ├── start-server.bat        # One-click Windows startup
+│   ├── main.py                 # FastAPI application
+│   ├── rag.py                  # ChromaDB + embeddings
+│   ├── config.py               # Pydantic settings
+│   └── requirements.txt        # Python dependencies
 └── images/
 ```
+
+---
+
+## 🐍 Python RAG Backend (Optional)
+
+For enhanced semantic search, you can run the Python backend with ChromaDB vector database.
+
+### Requirements
+- Python 3.10+ (tested with 3.13.9)
+- Windows (batch script provided)
+
+### Quick Start
+
+```powershell
+# Navigate to server folder
+cd server
+
+# Run the one-click startup script
+.\start-server.bat
+```
+
+The script will automatically:
+1. Create a virtual environment
+2. Install all dependencies (FastAPI, ChromaDB, sentence-transformers, etc.)
+3. Download spaCy English model
+4. Start the server at `http://localhost:8765`
+
+### API Endpoints
+
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/health` | GET | Server health check |
+| `/documents/upload` | POST | Upload PDF/TXT files |
+| `/documents/search` | POST | Semantic search |
+| `/documents/{subject}` | DELETE | Clear subject documents |
+
+### Without Python Backend
+
+The app works fully without the Python backend - it will use the built-in JavaScript TF-IDF engine for document search. The frontend auto-detects which engine to use.
 
 ---
 
@@ -121,6 +181,10 @@ S2-Sentinel-Copilot/
 | **PDF** | PDF.js for document parsing |
 | **Charts** | Chart.js for analytics |
 | **Markdown** | Marked.js + Prism.js |
+| **Backend** | FastAPI + Uvicorn (Python, optional) |
+| **Vector DB** | ChromaDB (persistent storage) |
+| **Embeddings** | sentence-transformers (all-MiniLM-L6-v2) |
+| **NLP** | spaCy (semantic chunking) |
 
 ---
 
