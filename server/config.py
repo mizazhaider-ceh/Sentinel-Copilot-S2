@@ -56,9 +56,9 @@ class Settings(BaseSettings):
         description="Embedding vector dimension"
     )
     
-    # Chunking Configuration
-    chunk_size: int = Field(default=500, ge=100, le=2000)
-    chunk_overlap: int = Field(default=50, ge=0, le=200)
+    # Chunking Configuration (tuned for academic/technical docs)
+    chunk_size: int = Field(default=600, ge=100, le=2000)
+    chunk_overlap: int = Field(default=80, ge=0, le=300)
     max_chunks_per_search: int = Field(default=10, ge=1, le=50)
     
     # Logging

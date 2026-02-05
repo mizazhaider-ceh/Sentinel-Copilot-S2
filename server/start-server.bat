@@ -41,33 +41,28 @@ if not exist "venv" (
 )
 
 :: Check if venv creation succeeded
-if not exist "venv\Scripts\activate.bat" (
+if not exist "venv\Scripts\python.exe" (
     echo [ERROR] Failed to create virtual environment!
     pause
     exit /b 1
 )
 
-:: Check if venv creation succeeded
-if not exist "venv\Scripts\activate.bat" (
-    echo [ERROR] Failed to create virtual environment!
-    pause
-    exit /b 1
-)
+:: Use venv Python/Pip explicitly (activation can silently fail on some systems)
+set "VENV_PYTHON=%~dp0venv\Scripts\python.exe"
+set "VENV_PIP=%~dp0venv\Scripts\pip.exe"
 
-:: Activate virtual environment (safe to call multiple times)
-echo [INFO] Activating virtual environment...
-call venv\Scripts\activate.bat
+echo [INFO] Using Python: %VENV_PYTHON%
 
 :: Check if dependencies are installed
-pip show fastapi >nul 2>&1
+"%VENV_PIP%" show fastapi >nul 2>&1
 if %errorlevel% neq 0 goto install_deps
 goto deps_ok
 
 :install_deps
 echo.
 echo [SETUP] Installing dependencies (this may take a few minutes)...
-pip install --upgrade pip
-pip install -r requirements.txt
+"%VENV_PIP%" install --upgrade pip
+"%VENV_PIP%" install -r requirements.txt
 if %errorlevel% neq 0 (
     echo [ERROR] Failed to install dependencies!
     pause
@@ -76,7 +71,7 @@ if %errorlevel% neq 0 (
 
 echo.
 echo [SETUP] Downloading spaCy English model...
-python -m spacy download en_core_web_sm
+"%VENV_PYTHON%" -m spacy download en_core_web_sm
 echo [OK] All dependencies installed
 
 :deps_ok
@@ -86,19 +81,30 @@ if not exist "data" mkdir data
 if not exist "data\chromadb" mkdir data\chromadb
 if not exist "logs" mkdir logs
 
+:: Start frontend HTTP server in background (serves index.html on port 3000)
+set "PROJECT_ROOT=%~dp0.."
+echo [INFO] Starting frontend server...
+start "" /B python -m http.server 3000 --directory "%PROJECT_ROOT%" >nul 2>&1
+
 echo.
-echo [INFO] Starting RAG backend server...
-echo [INFO] Server will be available at: http://localhost:8765
-echo [INFO] API docs available at: http://localhost:8765/docs
+echo  +=====================================================================+
+echo  ^|                    ALL SYSTEMS GO                                  ^|
+echo  +=====================================================================+
 echo.
-echo Press Ctrl+C to stop the server
-echo =====================================================================
+echo  [FRONTEND]  http://localhost:3000        (Open this in your browser)
+echo  [API]       http://localhost:8765        (Backend RAG API)
+echo  [API DOCS]  http://localhost:8765/docs   (Swagger UI)
+echo.
+echo  Press Ctrl+C to stop both servers
+echo  =====================================================================
 echo.
 
-:: Start the server
-python main.py
+:: Start the backend server (blocking - keeps window open)
+"%VENV_PYTHON%" main.py
 
-:: If server exits, pause to see any error messages
+:: Cleanup: kill the frontend server when backend stops
+taskkill /F /IM python.exe /FI "WINDOWTITLE eq http.server" >nul 2>&1
+
 echo.
-echo [INFO] Server stopped
+echo [INFO] Servers stopped
 pause

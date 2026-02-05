@@ -21,7 +21,68 @@ console.log('🔷 [main.js] All imports successful!');
 // APPLICATION INITIALIZATION
 // ═══════════════════════════════════════════════════════════════
 
+let appInitialized = false; // Track if app has been initialized
+
+// Detect infinite reload loops
+const RELOAD_KEY = 's2-reload-count';
+const RELOAD_TIMESTAMP_KEY = 's2-reload-timestamp';
+const MAX_RELOADS = 5;
+const RELOAD_WINDOW = 10000; // 10 seconds
+
+function checkReloadLoop() {
+    const now = Date.now();
+    const lastReload = parseInt(localStorage.getItem(RELOAD_TIMESTAMP_KEY) || '0');
+    
+    // If last reload was more than 10 seconds ago, reset counter
+    if (now - lastReload > RELOAD_WINDOW) {
+        localStorage.setItem(RELOAD_KEY, '1');
+        localStorage.setItem(RELOAD_TIMESTAMP_KEY, now.toString());
+        return false;
+    }
+    
+    // Increment reload counter
+    const reloadCount = parseInt(localStorage.getItem(RELOAD_KEY) || '0') + 1;
+    localStorage.setItem(RELOAD_KEY, reloadCount.toString());
+    localStorage.setItem(RELOAD_TIMESTAMP_KEY, now.toString());
+    
+    if (reloadCount > MAX_RELOADS) {
+        // Clear the counters
+        localStorage.removeItem(RELOAD_KEY);
+        localStorage.removeItem(RELOAD_TIMESTAMP_KEY);
+        return true; // Infinite loop detected!
+    }
+    
+    return false;
+}
+
 document.addEventListener('DOMContentLoaded', async () => {
+    // Check for infinite reload loop
+    if (checkReloadLoop()) {
+        document.body.innerHTML = `
+            <div style="display: flex; align-items: center; justify-content: center; height: 100vh; background: #0a0a0f; font-family: Inter, sans-serif;">
+                <div style="text-align: center; background: rgba(255,255,255,0.1); padding: 3rem; border-radius: 1rem; max-width: 500px;">
+                    <div style="font-size: 3rem; margin-bottom: 1rem;">⚠️</div>
+                    <h2 style="color: #ef4444; font-size: 1.5rem; margin-bottom: 1rem;">Infinite Reload Loop Detected</h2>
+                    <p style="color: #9ca3af; margin-bottom: 2rem;">
+                        The page has reloaded more than ${MAX_RELOADS} times in ${RELOAD_WINDOW/1000} seconds. 
+                        This indicates a configuration error.
+                    </p>
+                    <button onclick="localStorage.clear(); location.reload();" 
+                            style="background: #10b981; color: white; padding: 0.75rem 1.5rem; border: none; border-radius: 0.5rem; cursor: pointer; font-size: 1rem;">
+                        Clear All Data & Retry
+                    </button>
+                </div>
+            </div>
+        `;
+        return;
+    }
+
+    // Prevent duplicate initialization
+    if (appInitialized) {
+        console.warn('⚠️ DOMContentLoaded fired again, but app already initialized');
+        return;
+    }
+
     console.log(`🛡️ ${BRANDING.appName} v${BRANDING.version} initializing...`);
 
     try {
@@ -58,9 +119,22 @@ document.addEventListener('DOMContentLoaded', async () => {
         // Check API configuration
         checkApiConfiguration();
 
-        // Initial route
-        handleRoute();
+        // Handle initial route - use a small delay to ensure DOM is fully ready
+        // This prevents race conditions with hashchange events
+        setTimeout(() => {
+            // If no hash exists, set it silently
+            if (!window.location.hash || window.location.hash === '#' || window.location.hash === '') {
+                history.replaceState(null, '', '#/dashboard');
+            }
+            handleRoute();
+        }, 0);
 
+        appInitialized = true;
+        
+        // Clear reload counter on successful initialization
+        localStorage.removeItem(RELOAD_KEY);
+        localStorage.removeItem(RELOAD_TIMESTAMP_KEY);
+        
         console.log('✅ S2-Sentinel Copilot initialized');
         
     } catch (error) {
@@ -89,32 +163,60 @@ document.addEventListener('DOMContentLoaded', async () => {
 // HASH-BASED ROUTER
 // ═══════════════════════════════════════════════════════════════
 
+let isHandlingRoute = false; // Prevent re-entrant calls
+let routeCallCount = 0; // Track how many times route handler is called
+
 function setupRouter() {
     window.addEventListener('hashchange', handleRoute);
 }
 
 function handleRoute() {
-    const hash = window.location.hash || '#/dashboard';
-    const [, path, param] = hash.match(/#\/(\w+)\/?(.*)/) || [, 'dashboard', ''];
+    routeCallCount++;
+    
+    // Detect infinite loop
+    if (routeCallCount > 10) {
+        console.error(`❌ INFINITE LOOP DETECTED: handleRoute called ${routeCallCount} times! Stopping to prevent crash.`);
+        return;
+    }
 
-    console.log(`[Router] Navigating to: ${path}${param ? '/' + param : ''}`);
+    // Prevent re-entrant calls
+    if (isHandlingRoute) {
+        console.log('[Router] Route handling already in progress, skipping');
+        return;
+    }
 
-    // End any existing analytics session
-    Analytics.endSession();
+    isHandlingRoute = true;
 
-    switch (path) {
-        case 'subject':
-            if (param && SUBJECTS[param]) {
-                showWorkspace(param);
-            } else {
+    try {
+        const hash = window.location.hash || '#/dashboard';
+        const [, path, param] = hash.match(/#\/(\w+)\/?(.*)/) || [, 'dashboard', ''];
+
+        console.log(`[Router #${routeCallCount}] Navigating to: ${path}${param ? '/' + param : ''}`);
+
+        // End any existing analytics session
+        Analytics.endSession();
+
+        switch (path) {
+            case 'subject':
+                if (param && SUBJECTS[param]) {
+                    showWorkspace(param);
+                } else {
+                    showDashboard();
+                }
+                break;
+
+            case 'dashboard':
+            default:
                 showDashboard();
-            }
-            break;
-
-        case 'dashboard':
-        default:
-            showDashboard();
-            break;
+                break;
+        }
+    } finally {
+        // Release the lock after a short delay to prevent rapid repeated calls
+        setTimeout(() => {
+            isHandlingRoute = false;
+            // Reset counter after 2 seconds of no calls (successful navigation)
+            setTimeout(() => { routeCallCount = 0; }, 2000);
+        }, 100);
     }
 }
 

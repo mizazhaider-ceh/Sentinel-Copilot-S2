@@ -583,10 +583,29 @@ export const RAGEngine = {
     },
 
     /**
-     * Delete a document and its chunks
-     * @param {number} documentId - Document ID
+     * Delete a document and its chunks from both local + backend
+     * @param {number} documentId - Local IndexedDB document ID
      */
     async deleteDocument(documentId) {
+        // Get doc metadata to find backend ID before deleting locally
+        try {
+            const docs = await StorageIDB.getAllDocuments();
+            const doc = docs.find(d => d.id === documentId);
+            
+            if (doc?.backendDocId) {
+                // Delete from Python backend (ChromaDB + BM25)
+                try {
+                    await PythonBackend.deleteDocument(doc.backendDocId);
+                    console.log(`[RAG] Deleted from backend: ${doc.backendDocId}`);
+                } catch (err) {
+                    console.warn('[RAG] Backend delete failed (may be offline):', err.message);
+                }
+            }
+        } catch (err) {
+            console.warn('[RAG] Could not check backend doc ID:', err.message);
+        }
+        
+        // Always delete from local IndexedDB
         await StorageIDB.deleteDocument(documentId);
         console.log(`[RAG] Deleted document: ${documentId}`);
     },

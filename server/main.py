@@ -27,7 +27,8 @@ from pathlib import Path
 from typing import Optional
 from contextlib import asynccontextmanager
 
-from fastapi import FastAPI, File, UploadFile, Form, HTTPException, status
+import httpx
+from fastapi import FastAPI, File, UploadFile, Form, HTTPException, status, Query
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel, Field
@@ -74,6 +75,9 @@ class SearchResult(BaseModel):
     filename: str
     score: float
     header: Optional[str] = None
+    chunk_type: Optional[str] = None
+    vector_score: Optional[float] = None
+    rrf_score: Optional[float] = None
 
 class SearchResponse(BaseModel):
     """Search response model."""
@@ -81,6 +85,8 @@ class SearchResponse(BaseModel):
     query: str
     subject_id: str
     total_chunks_searched: int
+    search_method: str = "hybrid"
+    query_expanded: bool = False
 
 class DocumentResponse(BaseModel):
     """Document processing response."""
@@ -90,6 +96,9 @@ class DocumentResponse(BaseModel):
     chunk_count: int
     total_chars: int
     subject_id: str
+    headers_found: int = 0
+    code_blocks_found: int = 0
+    tables_found: int = 0
 
 class HealthResponse(BaseModel):
     """Health check response."""
@@ -244,7 +253,10 @@ async def upload_document(
             page_count=result['page_count'],
             chunk_count=result['chunk_count'],
             total_chars=result['total_chars'],
-            subject_id=subject_id
+            subject_id=subject_id,
+            headers_found=result.get('headers_found', 0),
+            code_blocks_found=result.get('code_blocks_found', 0),
+            tables_found=result.get('tables_found', 0)
         )
         
     except Exception as e:
@@ -281,7 +293,10 @@ async def search_documents(request: SearchRequest):
                 page=r['metadata'].get('page', 0),
                 filename=r['metadata'].get('filename', 'unknown'),
                 score=r['score'],
-                header=r['metadata'].get('header')
+                header=r['metadata'].get('header'),
+                chunk_type=r['metadata'].get('chunk_type'),
+                vector_score=r.get('vector_score'),
+                rrf_score=r.get('rrf_score')
             )
             for r in results['matches']
         ]
@@ -290,7 +305,9 @@ async def search_documents(request: SearchRequest):
             chunks=chunks,
             query=request.query,
             subject_id=request.subject_id,
-            total_chunks_searched=results['total_searched']
+            total_chunks_searched=results['total_searched'],
+            search_method=results.get('search_method', 'hybrid'),
+            query_expanded=results.get('query_expanded', False)
         )
         
     except Exception as e:
@@ -350,6 +367,118 @@ async def global_exception_handler(request, exc):
         status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
         content={"error": "Internal server error", "detail": str(exc)}
     )
+
+
+# ═══════════════════════════════════════════════════════════════════════════
+# WEB SEARCH PROXY (bypasses browser CORS restrictions)
+# ═══════════════════════════════════════════════════════════════════════════
+
+class WebSearchResult(BaseModel):
+    """Web search result."""
+    title: str
+    url: str
+    snippet: str
+    source: str
+
+class WebSearchResponse(BaseModel):
+    """Web search response."""
+    results: list[WebSearchResult]
+    query: str
+
+@app.get("/api/search", response_model=WebSearchResponse, tags=["Search"])
+async def web_search(
+    q: str = Query(..., min_length=1, max_length=500, description="Search query"),
+    max_results: int = Query(default=5, ge=1, le=10, description="Max results")
+):
+    """
+    Proxy web search endpoint - searches DuckDuckGo and Wikipedia.
+    Solves CORS issues by making requests server-side.
+    """
+    results = []
+    
+    async with httpx.AsyncClient(timeout=10.0) as client:
+        # Strategy 1: DuckDuckGo Instant Answer API
+        try:
+            ddg_url = "https://api.duckduckgo.com/"
+            ddg_resp = await client.get(ddg_url, params={
+                "q": q,
+                "format": "json",
+                "no_html": "1",
+                "skip_disambig": "1"
+            })
+            if ddg_resp.status_code == 200:
+                data = ddg_resp.json()
+                
+                # Main abstract
+                if data.get("Abstract") and data.get("AbstractText"):
+                    results.append(WebSearchResult(
+                        title=data.get("Heading", q),
+                        url=data.get("AbstractURL", ""),
+                        snippet=data["AbstractText"][:500],
+                        source="DuckDuckGo"
+                    ))
+                
+                # Related topics
+                for topic in data.get("RelatedTopics", []):
+                    if len(results) >= max_results:
+                        break
+                    if topic.get("Text") and topic.get("FirstURL"):
+                        results.append(WebSearchResult(
+                            title=topic["Text"].split(" - ")[0][:100],
+                            url=topic["FirstURL"],
+                            snippet=topic["Text"][:300],
+                            source="DuckDuckGo"
+                        ))
+                    # Subtopics
+                    for sub in topic.get("Topics", [])[:2]:
+                        if len(results) >= max_results:
+                            break
+                        if sub.get("Text") and sub.get("FirstURL"):
+                            results.append(WebSearchResult(
+                                title=sub["Text"].split(" - ")[0][:100],
+                                url=sub["FirstURL"],
+                                snippet=sub["Text"][:300],
+                                source="DuckDuckGo"
+                            ))
+                
+                logger.debug(f"DDG returned {len(results)} results for: {q}")
+                            
+        except Exception as e:
+            logger.warning(f"DDG search failed: {e}")
+        
+        # Strategy 2: Wikipedia (if DDG gave few results)
+        if len(results) < max_results:
+            try:
+                wiki_url = "https://en.wikipedia.org/w/api.php"
+                wiki_resp = await client.get(wiki_url, params={
+                    "action": "query",
+                    "list": "search",
+                    "srsearch": q,
+                    "format": "json",
+                    "srlimit": str(max_results - len(results)),
+                    "srprop": "snippet|titlesnippet"
+                })
+                if wiki_resp.status_code == 200:
+                    wiki_data = wiki_resp.json()
+                    for item in wiki_data.get("query", {}).get("search", []):
+                        if len(results) >= max_results:
+                            break
+                        import re
+                        clean_snippet = re.sub(r"<[^>]*>", "", item.get("snippet", ""))
+                        title = item.get("title", "")
+                        results.append(WebSearchResult(
+                            title=title,
+                            url=f"https://en.wikipedia.org/wiki/{title.replace(' ', '_')}",
+                            snippet=clean_snippet[:300],
+                            source="Wikipedia"
+                        ))
+                    
+                    logger.debug(f"Wikipedia returned {len(results)} total results for: {q}")
+                    
+            except Exception as e:
+                logger.warning(f"Wikipedia search failed: {e}")
+    
+    return WebSearchResponse(results=results, query=q)
 
 
 # ═══════════════════════════════════════════════════════════════════════════

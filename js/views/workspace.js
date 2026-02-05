@@ -8,6 +8,7 @@ import { AppState } from '../state-manager.js';
 import { ApiService } from '../services/api.js';
 import { PromptBuilder } from '../features/prompt-builder.js';
 import { RAGEngine } from '../features/rag-engine.js';
+import { WebSearch } from '../services/web-search.js';
 import { Toolkit } from '../features/toolkit.js';
 import { Analytics } from '../features/analytics.js';
 import { DOM } from '../ui/dom.js';
@@ -163,7 +164,11 @@ export const Workspace = {
                 <div class="flex items-center gap-4 mt-2 text-xs text-gray-400">
                     <label class="flex items-center gap-2 cursor-pointer">
                         <input type="checkbox" id="use-rag" checked class="rounded">
-                        <span>Use uploaded documents</span>
+                        <span>Use documents</span>
+                    </label>
+                    <label class="flex items-center gap-2 cursor-pointer">
+                        <input type="checkbox" id="use-search" class="rounded">
+                        <span><i class="fas fa-globe text-blue-400"></i> Search internet</span>
                     </label>
                     <label class="flex items-center gap-2 cursor-pointer">
                         <input type="checkbox" id="use-streaming" class="rounded">
@@ -315,6 +320,7 @@ export const Workspace = {
         const input = document.getElementById('chat-input');
         const sendBtn = document.getElementById('send-btn');
         const useRag = document.getElementById('use-rag')?.checked ?? true;
+        const useSearch = document.getElementById('use-search')?.checked ?? false;
         const useStreaming = document.getElementById('use-streaming')?.checked ?? false;
 
         const message = input?.value.trim();
@@ -342,13 +348,31 @@ export const Workspace = {
                 this.updateContextSidebar(ragChunks);
             }
 
-            // Build prompt
+            // Get internet search results if enabled
+            let searchResults = [];
+            if (useSearch) {
+                try {
+                    const searchContext = WebSearch.getSubjectSearchContext(this.currentSubject.id);
+                    searchResults = await WebSearch.search(message, {
+                        maxResults: 5,
+                        subjectContext: searchContext
+                    });
+                    if (searchResults.length > 0) {
+                        console.log(`[Chat] Search returned ${searchResults.length} results`);
+                    }
+                } catch (searchErr) {
+                    console.warn('[Chat] Search failed:', searchErr.message);
+                }
+            }
+
+            // Build prompt (per-subject persona with search + RAG context)
             const prompt = PromptBuilder.build(
                 this.currentSubject.id,
                 message,
                 ragChunks,
                 AppState.getHistory(this.currentSubject.id).slice(-6),
-                'chat'
+                'chat',
+                { searchResults }
             );
 
             let response;
@@ -585,26 +609,52 @@ Click the ⚙️ settings icon to add your Cerebras or Gemini API key.`;
                 <div class="text-center text-gray-400 py-8">
                     <i class="fas fa-folder-open text-3xl mb-2"></i>
                     <p>No documents uploaded yet</p>
+                    <p class="text-xs mt-1 text-gray-500">Upload PDFs to enable context-aware AI responses</p>
                 </div>
             `;
             return;
         }
 
-        container.innerHTML = docs.map(doc => `
-            <div class="glass-effect p-3 rounded-lg flex items-center justify-between group">
-                <div class="flex items-center gap-3">
-                    <i class="fas fa-file-pdf text-red-400 text-lg"></i>
-                    <div>
-                        <div class="text-sm font-medium text-white truncate max-w-[200px]">${doc.filename}</div>
-                        <div class="text-xs text-gray-400">${doc.pageCount} pages • ${doc.chunkCount} chunks</div>
-                    </div>
-                </div>
-                <button class="delete-doc-btn opacity-0 group-hover:opacity-100 p-2 hover:bg-red-500/20 rounded-lg transition-all"
-                        data-doc-id="${doc.id}">
-                    <i class="fas fa-trash text-red-400"></i>
-                </button>
+        container.innerHTML = `
+            <div class="flex items-center justify-between mb-3">
+                <span class="text-xs text-gray-400">${docs.length} document${docs.length !== 1 ? 's' : ''}</span>
+                ${docs.length > 1 ? `
+                    <button id="delete-all-docs-btn" class="text-xs text-red-400 hover:text-red-300 transition-colors px-2 py-1 rounded hover:bg-red-500/10">
+                        <i class="fas fa-trash-alt mr-1"></i>Delete All
+                    </button>
+                ` : ''}
             </div>
-        `).join('');
+            ${docs.map(doc => `
+                <div class="glass-effect p-3 rounded-lg flex items-center justify-between group hover:border-gray-500 border border-transparent transition-all">
+                    <div class="flex items-center gap-3 min-w-0 flex-1">
+                        <div class="w-9 h-9 rounded-lg bg-red-500/10 flex items-center justify-center flex-shrink-0">
+                            <i class="fas fa-file-pdf text-red-400"></i>
+                        </div>
+                        <div class="min-w-0">
+                            <div class="text-sm font-medium text-white truncate max-w-[200px]" title="${doc.filename}">${doc.filename}</div>
+                            <div class="text-xs text-gray-400 flex items-center gap-2">
+                                <span>${doc.pageCount || '?'} pages</span>
+                                <span class="text-gray-600">•</span>
+                                <span>${doc.chunkCount || '?'} chunks</span>
+                                ${doc.backendProcessed ? '<span class="text-emerald-400" title="Indexed in vector database"><i class="fas fa-check-circle"></i></span>' : '<span class="text-yellow-400" title="Local only"><i class="fas fa-exclamation-circle"></i></span>'}
+                            </div>
+                        </div>
+                    </div>
+                    <button class="delete-doc-btn opacity-0 group-hover:opacity-100 p-2 hover:bg-red-500/20 rounded-lg transition-all flex-shrink-0"
+                            data-doc-id="${doc.id}" data-doc-name="${doc.filename}" title="Delete document">
+                        <i class="fas fa-trash text-red-400 text-sm"></i>
+                    </button>
+                </div>
+            `).join('')}
+        `;
+
+        // Delete All handler
+        const deleteAllBtn = document.getElementById('delete-all-docs-btn');
+        if (deleteAllBtn) {
+            deleteAllBtn.addEventListener('click', () => {
+                this.showDeleteAllConfirmation(docs);
+            });
+        }
     },
 
     async loadDocumentsSidebar() {
@@ -656,6 +706,117 @@ Click the ⚙️ settings icon to add your Cerebras or Gemini API key.`;
         } catch (error) {
             Toast.show(`Upload failed: ${error.message}`, 'error');
         }
+    },
+
+    /**
+     * Show delete confirmation modal for a single document
+     */
+    showDeleteConfirmation(docId, docName) {
+        const overlay = document.createElement('div');
+        overlay.className = 'fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4';
+        overlay.id = 'delete-confirm-overlay';
+        overlay.innerHTML = `
+            <div class="glass-effect rounded-2xl p-6 max-w-sm w-full border border-gray-600 shadow-2xl animate-scale-in">
+                <div class="text-center mb-4">
+                    <div class="w-14 h-14 rounded-full bg-red-500/20 flex items-center justify-center mx-auto mb-3">
+                        <i class="fas fa-trash-alt text-red-400 text-xl"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-white">Delete Document?</h3>
+                    <p class="text-sm text-gray-400 mt-2">
+                        This will permanently remove <span class="text-white font-medium">${docName}</span> 
+                        and all its indexed chunks from the vector database.
+                    </p>
+                </div>
+                <div class="flex gap-3">
+                    <button id="cancel-delete-btn" class="flex-1 px-4 py-2.5 bg-gray-700 text-gray-300 rounded-xl hover:bg-gray-600 transition-colors font-medium">
+                        Cancel
+                    </button>
+                    <button id="confirm-delete-btn" class="flex-1 px-4 py-2.5 bg-red-500 text-white rounded-xl hover:bg-red-600 transition-colors font-medium">
+                        <i class="fas fa-trash mr-1"></i>Delete
+                    </button>
+                </div>
+            </div>
+        `;
+        document.body.appendChild(overlay);
+
+        // Close on backdrop click
+        overlay.addEventListener('click', (e) => {
+            if (e.target === overlay) overlay.remove();
+        });
+
+        document.getElementById('cancel-delete-btn').addEventListener('click', () => overlay.remove());
+
+        document.getElementById('confirm-delete-btn').addEventListener('click', async () => {
+            const btn = document.getElementById('confirm-delete-btn');
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-1"></i>Deleting...';
+            btn.disabled = true;
+
+            try {
+                await RAGEngine.deleteDocument(docId);
+                this.loadDocumentsList();
+                this.loadDocumentsSidebar();
+                Toast.show('Document deleted from local storage and vector DB', 'info');
+            } catch (err) {
+                Toast.show(`Delete failed: ${err.message}`, 'error');
+            }
+            overlay.remove();
+        });
+    },
+
+    /**
+     * Show delete-all confirmation modal
+     */
+    showDeleteAllConfirmation(docs) {
+        const overlay = document.createElement('div');
+        overlay.className = 'fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4';
+        overlay.id = 'delete-all-confirm-overlay';
+        overlay.innerHTML = `
+            <div class="glass-effect rounded-2xl p-6 max-w-sm w-full border border-red-500/30 shadow-2xl animate-scale-in">
+                <div class="text-center mb-4">
+                    <div class="w-14 h-14 rounded-full bg-red-500/20 flex items-center justify-center mx-auto mb-3">
+                        <i class="fas fa-exclamation-triangle text-red-400 text-xl"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-white">Delete All Documents?</h3>
+                    <p class="text-sm text-gray-400 mt-2">
+                        This will permanently remove <span class="text-red-400 font-bold">${docs.length}</span> document${docs.length !== 1 ? 's' : ''} 
+                        and all indexed chunks from the vector database. This cannot be undone.
+                    </p>
+                </div>
+                <div class="flex gap-3">
+                    <button id="cancel-delete-all-btn" class="flex-1 px-4 py-2.5 bg-gray-700 text-gray-300 rounded-xl hover:bg-gray-600 transition-colors font-medium">
+                        Cancel
+                    </button>
+                    <button id="confirm-delete-all-btn" class="flex-1 px-4 py-2.5 bg-red-600 text-white rounded-xl hover:bg-red-700 transition-colors font-medium">
+                        <i class="fas fa-trash mr-1"></i>Delete All
+                    </button>
+                </div>
+            </div>
+        `;
+        document.body.appendChild(overlay);
+
+        overlay.addEventListener('click', (e) => {
+            if (e.target === overlay) overlay.remove();
+        });
+
+        document.getElementById('cancel-delete-all-btn').addEventListener('click', () => overlay.remove());
+
+        document.getElementById('confirm-delete-all-btn').addEventListener('click', async () => {
+            const btn = document.getElementById('confirm-delete-all-btn');
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-1"></i>Deleting...';
+            btn.disabled = true;
+
+            try {
+                for (const doc of docs) {
+                    await RAGEngine.deleteDocument(doc.id);
+                }
+                this.loadDocumentsList();
+                this.loadDocumentsSidebar();
+                Toast.show(`Deleted ${docs.length} documents`, 'info');
+            } catch (err) {
+                Toast.show(`Delete failed: ${err.message}`, 'error');
+            }
+            overlay.remove();
+        });
     },
 
     // ═══════════════════════════════════════════════════════════════
@@ -769,15 +930,13 @@ Click the ⚙️ settings icon to add your Cerebras or Gemini API key.`;
             }
         });
 
-        // Delete document
+        // Delete document (with confirmation)
         document.addEventListener('click', async (e) => {
             const btn = e.target.closest('.delete-doc-btn');
             if (btn) {
                 const docId = parseInt(btn.dataset.docId);
-                await RAGEngine.deleteDocument(docId);
-                this.loadDocumentsList();
-                this.loadDocumentsSidebar();
-                Toast.show('Document deleted', 'info');
+                const docName = btn.dataset.docName || 'this document';
+                this.showDeleteConfirmation(docId, docName);
             }
         });
 
