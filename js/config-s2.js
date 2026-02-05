@@ -213,6 +213,39 @@ export const SUBJECTS = {
         promptStyle: 'Reference specific GDPR articles (e.g., Art. 6, Art. 17) and real European court cases (CJEU decisions). Use scenario-based explanations for practical understanding.',
         examType: 'written exam',
         description: 'European data protection law, GDPR compliance, and IT legal frameworks.'
+    },
+
+    aisec: {
+        id: 'aisec',
+        name: 'AI x Cybersecurity',
+        code: 'CS-AISEC-S2',
+        credits: 6,
+        color: '#a855f7',
+        gradient: 'from-purple-600 to-fuchsia-600',
+        icon: 'fa-brain',
+        teachers: ['MIHx0 (Advanced Track)'],
+        topics: [
+            'AI Security Fundamentals',
+            'Adversarial Machine Learning',
+            'Prompt Injection Attacks',
+            'AI-Powered Penetration Testing',
+            'LLM Security (OWASP Top 10 for LLMs)',
+            'Model Poisoning & Backdoors',
+            'AI Red Teaming',
+            'Deepfake Detection',
+            'AI-Assisted Malware Analysis',
+            'Neural Network Exploitation',
+            'AI Ethics & Safety',
+            'Automated Vulnerability Scanning',
+            'ML Model Extraction Attacks',
+            'AI in Threat Intelligence',
+            'Defensive AI Systems'
+        ],
+        pedagogy: 'research-driven',
+        toolkit: ['ai-red-team', 'prompt-fuzzer', 'model-extractor', 'adversarial-gen'],
+        promptStyle: 'Blend cutting-edge research papers with practical exploitation techniques. Reference OWASP AI Security, MITRE ATLAS framework, and recent CVEs. Provide Python code for attacks and defenses. Emphasize responsible disclosure.',
+        examType: 'research project + practical demo',
+        description: 'Cutting-edge intersection of AI and cybersecurity: offensive AI, defensive AI, and adversarial ML.'
     }
 };
 
@@ -223,7 +256,8 @@ export const PEDAGOGY_STYLES = {
     'cli-first': 'Provide the exact terminal command IMMEDIATELY. Then break down each flag and option. Assume Linux/Bash environment.',
     'hint-ladder': 'Give the smallest helpful nudge first. Only reveal more when explicitly asked. Focus on teaching methodology over direct answers.',
     'annotated-code': 'Provide heavily commented code where every significant line has an inline explanation. Compare different language approaches.',
-    'case-based': 'Reference specific legal articles and real court cases. Use scenario-based explanations for practical understanding.'
+    'case-based': 'Reference specific legal articles and real court cases. Use scenario-based explanations for practical understanding.',
+    'research-driven': 'Cite recent research papers (arXiv, academic conferences) and CVE disclosures. Provide reproducible Python code for both attack and defense. Link theory to practice with real-world examples.'
 };
 
 export const CONSTANTS = {
@@ -249,7 +283,7 @@ export const SYSTEM_PROMPTS = {
 You are **S2-Sentinel**, an elite AI tutor built by **MIHx0 (Muhammad Izaz Haider)**.
 - Creator: Junior DevSecOps & AI Security Engineer at Damno Solutions
 - Purpose: Specialized AI for CS Engineering Semester 2 at Howest University, Belgium
-- Specialization: 7 subjects covering networks, security, backend, Linux, CTF, scripting, and privacy law
+- Specialization: 8 subjects covering networks, security, backend, Linux, CTF, scripting, privacy law, and AI security
 
 CORE RULES:
 1. When asked "Who made you?", always attribute MIHx0 (Muhammad Izaz Haider)

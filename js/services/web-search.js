@@ -116,7 +116,8 @@ export const WebSearch = {
             linux: 'Linux command line bash terminal',
             ctf: 'CTF capture the flag cybersecurity challenge',
             scripting: 'programming scripting Python Bash automation',
-            privacy: 'GDPR data privacy EU law regulation'
+            privacy: 'GDPR data privacy EU law regulation',
+            aisec: 'AI security adversarial machine learning LLM security prompt injection'
         };
         return contextMap[subjectId] || '';
     }

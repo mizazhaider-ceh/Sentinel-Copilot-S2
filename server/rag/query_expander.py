@@ -48,6 +48,19 @@ class QueryExpander:
         'orm': ['object relational mapping', 'orm', 'database abstraction'],
         'jwt': ['json web token', 'jwt', 'authentication token'],
         'cors': ['cross-origin resource sharing', 'cors'],
+        # AI Security terms
+        'llm': ['large language model', 'llm', 'language model', 'chatgpt'],
+        'prompt injection': ['prompt injection', 'prompt attack', 'indirect prompt injection'],
+        'adversarial ml': ['adversarial machine learning', 'adversarial examples', 'adversarial attack'],
+        'adversarial': ['adversarial examples', 'adversarial perturbations', 'adversarial attack'],
+        'model poisoning': ['model poisoning', 'data poisoning', 'backdoor attack'],
+        'model extraction': ['model extraction', 'model stealing', 'knowledge distillation attack'],
+        'ai red team': ['ai red teaming', 'llm red teaming', 'adversarial testing'],
+        'jailbreak': ['jailbreak attack', 'llm jailbreak', 'alignment bypass'],
+        'membership inference': ['membership inference', 'privacy attack', 'model inversion'],
+        'fgsm': ['fast gradient sign method', 'fgsm', 'adversarial example generation'],
+        'deepfake': ['deepfake', 'synthetic media', 'face synthesis'],
+        'mitre atlas': ['mitre atlas', 'adversarial threat landscape', 'ai threat matrix'],
     }
 
     SUBJECT_CONTEXT = {
@@ -58,6 +71,7 @@ class QueryExpander:
         'ctf': ['flag', 'challenge', 'crypto', 'forensics', 'reverse engineering'],
         'scripting': ['script', 'automation', 'function', 'variable', 'loop', 'module'],
         'privacy': ['data protection', 'regulation', 'consent', 'processing', 'controller'],
+        'aisec': ['adversarial', 'model security', 'AI attack', 'LLM', 'neural network', 'machine learning']
     }
 
     @classmethod
