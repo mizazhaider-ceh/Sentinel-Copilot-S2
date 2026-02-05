@@ -1,0 +1,291 @@
+/**
+ * sentinel.css
+ * S2-Sentinel Copilot specific styles and subject accent colors
+ */
+
+/* ═══════════════════════════════════════════════════════════════
+   SUBJECT ACCENT COLORS
+   ═══════════════════════════════════════════════════════════════ */
+
+:root {
+    /* Subject Colors */
+    --subject-networks: #3b82f6;
+    --subject-pentesting: #ef4444;
+    --subject-backend: #22c55e;
+    --subject-linux: #f59e0b;
+    --subject-ctf: #8b5cf6;
+    --subject-scripting: #06b6d4;
+    --subject-privacy: #ec4899;
+
+    /* Sentinel Theme */
+    --sentinel-bg: #0a0a0f;
+    --sentinel-surface: #12121a;
+    --sentinel-border: rgba(255, 255, 255, 0.1);
+    --sentinel-text: #e0e0e0;
+    --sentinel-text-muted: #9ca3af;
+    --sentinel-accent: #10b981;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   GLASS EFFECTS OVERRIDE
+   ═══════════════════════════════════════════════════════════════ */
+
+.glass-effect {
+    background: rgba(18, 18, 26, 0.8);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--sentinel-border);
+}
+
+.glass-dark {
+    background: rgba(10, 10, 15, 0.9);
+    backdrop-filter: blur(20px);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   SUBJECT CARDS
+   ═══════════════════════════════════════════════════════════════ */
+
+.subject-card {
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.subject-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, transparent 50%, rgba(255, 255, 255, 0.02));
+    pointer-events: none;
+}
+
+.subject-card:hover {
+    transform: translateY(-4px);
+}
+
+.subject-card[data-subject="networks"]:hover {
+    box-shadow: 0 20px 40px -10px rgba(59, 130, 246, 0.3);
+}
+
+.subject-card[data-subject="pentesting"]:hover {
+    box-shadow: 0 20px 40px -10px rgba(239, 68, 68, 0.3);
+}
+
+.subject-card[data-subject="backend"]:hover {
+    box-shadow: 0 20px 40px -10px rgba(34, 197, 94, 0.3);
+}
+
+.subject-card[data-subject="linux"]:hover {
+    box-shadow: 0 20px 40px -10px rgba(245, 158, 11, 0.3);
+}
+
+.subject-card[data-subject="ctf"]:hover {
+    box-shadow: 0 20px 40px -10px rgba(139, 92, 246, 0.3);
+}
+
+.subject-card[data-subject="scripting"]:hover {
+    box-shadow: 0 20px 40px -10px rgba(6, 182, 212, 0.3);
+}
+
+.subject-card[data-subject="privacy"]:hover {
+    box-shadow: 0 20px 40px -10px rgba(236, 72, 153, 0.3);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   TAB BUTTONS
+   ═══════════════════════════════════════════════════════════════ */
+
+.tab-btn {
+    padding: 0.5rem 1rem;
+    border-radius: 0.75rem;
+    background: transparent;
+    color: var(--sentinel-text-muted);
+    border: 1px solid transparent;
+    transition: all 0.2s ease;
+    font-size: 0.875rem;
+    display: flex;
+    align-items: center;
+}
+
+.tab-btn:hover {
+    background: rgba(255, 255, 255, 0.05);
+    color: white;
+}
+
+.tab-btn.active {
+    background: rgba(16, 185, 129, 0.15);
+    color: #10b981;
+    border-color: rgba(16, 185, 129, 0.3);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   CHAT BUBBLES
+   ═══════════════════════════════════════════════════════════════ */
+
+.chat-bubble-user {
+    background: rgba(59, 130, 246, 0.15);
+    border: 1px solid rgba(59, 130, 246, 0.3);
+    border-radius: 1rem 1rem 0.25rem 1rem;
+    padding: 1rem;
+    color: white;
+}
+
+.chat-bubble-ai {
+    background: rgba(16, 185, 129, 0.1);
+    border: 1px solid rgba(16, 185, 129, 0.2);
+    border-radius: 1rem 1rem 1rem 0.25rem;
+    padding: 1rem;
+    color: white;
+}
+
+.chat-bubble-ai.error {
+    background: rgba(239, 68, 68, 0.15);
+    border-color: rgba(239, 68, 68, 0.3);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   TOOL ITEMS
+   ═══════════════════════════════════════════════════════════════ */
+
+.tool-item {
+    position: relative;
+    transition: all 0.2s ease;
+}
+
+.tool-item:hover {
+    transform: translateX(4px);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   ANIMATIONS
+   ═══════════════════════════════════════════════════════════════ */
+
+@keyframes pulse-glow {
+    0%, 100% {
+        box-shadow: 0 0 20px rgba(16, 185, 129, 0.3);
+    }
+    50% {
+        box-shadow: 0 0 40px rgba(16, 185, 129, 0.5);
+    }
+}
+
+.glow-pulse {
+    animation: pulse-glow 2s ease-in-out infinite;
+}
+
+@keyframes slide-up {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animate-slide-up {
+    animation: slide-up 0.3s ease-out;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   SCROLLBAR
+   ═══════════════════════════════════════════════════════════════ */
+
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgba(16, 185, 129, 0.3);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(16, 185, 129, 0.5);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   FORM INPUTS
+   ═══════════════════════════════════════════════════════════════ */
+
+input[type="text"],
+input[type="number"],
+input[type="password"],
+textarea,
+select {
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: white;
+    transition: all 0.2s ease;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+    border-color: var(--sentinel-accent);
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   STATUS INDICATORS
+   ═══════════════════════════════════════════════════════════════ */
+
+.status-connected {
+    color: #10b981;
+}
+
+.status-disconnected {
+    color: #ef4444;
+}
+
+.status-demo {
+    color: #f59e0b;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   LINE CLAMP UTILITIES
+   ═══════════════════════════════════════════════════════════════ */
+
+.line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.line-clamp-3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   RESPONSIVE ADJUSTMENTS
+   ═══════════════════════════════════════════════════════════════ */
+
+@media (max-width: 768px) {
+    .subject-card {
+        padding: 1rem;
+    }
+
+    .tab-btn span {
+        display: none;
+    }
+
+    #context-sidebar {
+        display: none !important;
+    }
+}

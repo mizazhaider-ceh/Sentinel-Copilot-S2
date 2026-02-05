@@ -1,0 +1,153 @@
+/* css/variables.css */
+
+:root {
+    /* Default (Glass) Theme - Deep Emerald Gradient */
+    --color-bg-primary: #0f172a;
+    --color-bg-gradient: linear-gradient(135deg, #0f172a 0%, #064e3b 100%);
+    --color-bg-secondary: rgba(15, 23, 42, 0.7);
+    --color-text-primary: #f8fafc;
+    --color-text-secondary: #cbd5e1;
+    --color-accent: #34d399;
+    /* Emerald 400 */
+    --color-accent-hover: #10b981;
+    --color-accent-dim: rgba(52, 211, 153, 0.15);
+    --color-border: rgba(52, 211, 153, 0.3);
+    --font-heading: 'Outfit', sans-serif;
+    --font-body: 'Inter', sans-serif;
+    --glass-bg: rgba(15, 23, 42, 0.6);
+    --glass-border: 1px solid rgba(255, 255, 255, 0.08);
+    --shadow-glow: 0 0 20px rgba(52, 211, 153, 0.2);
+}
+
+body {
+    background: var(--color-bg-gradient);
+    background-attachment: fixed;
+    min-height: 100vh;
+}
+
+[data-theme="ocean"] {
+    /* Deep Ocean Gradient */
+    --color-bg-primary: #082f49;
+    --color-bg-gradient: linear-gradient(to bottom right, #082f49, #0e7490);
+    --color-bg-secondary: rgba(8, 47, 73, 0.7);
+    --color-accent: #22d3ee;
+    /* Cyan 400 */
+    --color-accent-hover: #06b6d4;
+    --color-accent-dim: rgba(34, 211, 238, 0.15);
+    --color-border: rgba(34, 211, 238, 0.3);
+    --shadow-glow: 0 0 20px rgba(34, 211, 238, 0.3);
+}
+
+[data-theme="forest"] {
+    /* Mysterious Forest Gradient */
+    --color-bg-primary: #022c22;
+    --color-bg-gradient: linear-gradient(to bottom right, #022c22, #14532d);
+    --color-bg-secondary: rgba(2, 44, 34, 0.7);
+    --color-accent: #a3e635;
+    /* Lime 400 */
+    --color-accent-hover: #84cc16;
+    --color-accent-dim: rgba(163, 230, 53, 0.15);
+    --color-border: rgba(163, 230, 53, 0.3);
+    --shadow-glow: 0 0 20px rgba(163, 230, 53, 0.3);
+}
+
+[data-theme="sunset"] {
+    /* Vibrant Sunset Gradient */
+    --color-bg-primary: #4a044e;
+    --color-bg-gradient: linear-gradient(to bottom right, #2e1065, #db2777);
+    --color-bg-secondary: rgba(74, 4, 78, 0.6);
+    --color-accent: #f472b6;
+    /* Pink 400 */
+    --color-accent-hover: #e879f9;
+    --color-accent-dim: rgba(244, 114, 182, 0.2);
+    --color-border: rgba(244, 114, 182, 0.4);
+    --shadow-glow: 0 0 25px rgba(244, 114, 182, 0.4);
+}
+
+[data-theme="lavender"] {
+    /* Soft Dreamy Gradient */
+    --color-bg-primary: #312e81;
+    --color-bg-gradient: linear-gradient(120deg, #312e81, #6366f1);
+    --color-bg-secondary: rgba(49, 46, 129, 0.6);
+    --color-accent: #c084fc;
+    /* Purple 400 */
+    --color-accent-hover: #a855f7;
+    --color-accent-dim: rgba(192, 132, 252, 0.2);
+    --color-border: rgba(192, 132, 252, 0.3);
+    --shadow-glow: 0 0 20px rgba(192, 132, 252, 0.3);
+}
+
+[data-theme="cyber"] {
+    /* Cyberpunk High Contrast */
+    --color-bg-primary: #000000;
+    --color-bg-gradient: radial-gradient(circle at 50% -20%, #202020, #000000 80%);
+    --color-bg-secondary: rgba(10, 10, 10, 0.9);
+    --color-text-primary: #ffffff;
+    --color-accent: #ffe41c;
+    /* Laser Yellow */
+    --color-accent-hover: #facc15;
+    --color-accent-dim: rgba(255, 228, 28, 0.2);
+    --color-border: #ffe41c;
+    --font-heading: 'Courier New', monospace;
+    --glass-bg: rgba(0, 0, 0, 0.8);
+    --glass-border: 1px solid #ffe41c;
+    --shadow-glow: 0 0 15px #ffe41c, 0 0 30px rgba(255, 228, 28, 0.2);
+}
+
+[data-theme="light"] {
+    /* Minimalist Light */
+    --color-bg-primary: #f8fafc;
+    --color-bg-gradient: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+    --color-bg-secondary: rgba(255, 255, 255, 0.8);
+    --color-text-primary: #0f172a;
+    --color-text-secondary: #475569;
+    --color-accent: #059669;
+    /* Emerald 600 */
+    --color-accent-hover: #047857;
+    --color-accent-dim: rgba(5, 150, 105, 0.1);
+    --color-border: rgba(5, 150, 105, 0.2);
+    --glass-bg: rgba(255, 255, 255, 0.7);
+    --glass-border: 1px solid rgba(0, 0, 0, 0.05);
+    --shadow-glow: 0 0 15px rgba(5, 150, 105, 0.1);
+}
+
+[data-theme="midnight"] {
+    /* Ultra Dark Midnight */
+    --color-bg-primary: #020617;
+    --color-bg-gradient: linear-gradient(to bottom, #020617, #0f172a);
+    --color-bg-secondary: rgba(2, 6, 23, 0.8);
+    --color-text-primary: #f8fafc;
+    --color-text-secondary: #94a3b8;
+    --color-accent: #6366f1;
+    /* Indigo 500 */
+    --color-accent-hover: #4f46e5;
+    --color-accent-dim: rgba(99, 102, 241, 0.15);
+    --color-border: rgba(99, 102, 241, 0.25);
+    --shadow-glow: 0 0 20px rgba(99, 102, 241, 0.2);
+}
+
+[data-theme="nebula"] {
+    /* Cosmic Nebula */
+    --color-bg-primary: #2e022d;
+    --color-bg-gradient: radial-gradient(circle at top right, #4a044e, #1e1b4b 70%, #0f172a);
+    --color-bg-secondary: rgba(46, 2, 45, 0.6);
+    --color-accent: #d946ef;
+    /* Fuchsia 500 */
+    --color-accent-hover: #c026d3;
+    --color-accent-dim: rgba(217, 70, 239, 0.2);
+    --color-border: rgba(217, 70, 239, 0.3);
+    --shadow-glow: 0 0 25px rgba(217, 70, 239, 0.3);
+}
+
+[data-theme="aurora"] {
+    /* Northern Lights */
+    --color-bg-primary: #042f2e;
+    --color-bg-gradient: linear-gradient(45deg, #042f2e, #115e59 40%, #0f172a 90%);
+    --color-bg-secondary: rgba(4, 47, 46, 0.7);
+    --color-accent: #2dd4bf;
+    /* Teal 400 */
+    --color-accent-hover: #14b8a6;
+    --color-accent-dim: rgba(45, 212, 191, 0.2);
+    --color-border: rgba(45, 212, 191, 0.3);
+    --shadow-glow: 0 0 20px rgba(45, 212, 191, 0.3);
+}

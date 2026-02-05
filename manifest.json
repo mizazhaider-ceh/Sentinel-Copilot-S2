@@ -1,0 +1,19 @@
+{
+  "name": "S2-Sentinel Copilot",
+  "short_name": "S2-Sentinel",
+  "description": "Hyper-Intelligent AI Study Platform for CS Engineering Semester 2",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#0a0a0f",
+  "theme_color": "#10b981",
+  "orientation": "any",
+  "categories": ["education", "productivity"],
+  "icons": [
+    {
+      "src": "images/logo.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}

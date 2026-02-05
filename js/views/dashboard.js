@@ -1,0 +1,171 @@
+/**
+ * dashboard.js
+ * Dashboard View - Subject Grid & Analytics Overview
+ */
+
+import { SUBJECTS, BRANDING } from '../config-s2.js';
+import { Analytics } from '../features/analytics.js';
+import { RAGEngine } from '../features/rag-engine.js';
+
+// Navigation helper (avoids circular import with main.js)
+function navigateToSubject(subjectId) {
+    window.location.hash = `/subject/${subjectId}`;
+}
+
+export const Dashboard = {
+
+    /**
+     * Render the dashboard view
+     * @param {HTMLElement} container - Container element
+     */
+    async render(container) {
+        container.innerHTML = this.getTemplate();
+
+        // Render subject cards
+        await this.renderSubjectCards();
+
+        // Render analytics
+        await this.renderAnalytics();
+
+        // Add event listeners
+        this.setupEventListeners();
+    },
+
+    getTemplate() {
+        return `
+            <!-- Dashboard Header -->
+            <div class="mb-8">
+                <h1 class="text-3xl font-bold text-white mb-2">
+                    <span class="text-emerald-400">S2</span>-Sentinel Dashboard
+                </h1>
+                <p class="text-gray-400">Your Semester 2 Study Command Center</p>
+            </div>
+
+            <!-- Quick Stats -->
+            <div id="quick-stats" class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+                <!-- Populated dynamically -->
+            </div>
+
+            <!-- Subject Grid -->
+            <div class="mb-8">
+                <h2 class="text-xl font-bold text-white mb-4 flex items-center gap-2">
+                    <i class="fas fa-book-open text-emerald-400"></i>
+                    Your Courses
+                </h2>
+                <div id="subject-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                    <!-- Subject cards populated dynamically -->
+                </div>
+            </div>
+
+            <!-- Analytics Section -->
+            <div class="mb-8">
+                <h2 class="text-xl font-bold text-white mb-4 flex items-center gap-2">
+                    <i class="fas fa-chart-bar text-emerald-400"></i>
+                    Study Analytics
+                </h2>
+                <div id="analytics-container">
+                    <!-- Charts rendered dynamically -->
+                </div>
+            </div>
+        `;
+    },
+
+    async renderSubjectCards() {
+        const grid = document.getElementById('subject-grid');
+        if (!grid) return;
+
+        // Get document counts
+        const docCounts = await RAGEngine.getDocumentCounts();
+
+        // Get analytics summary
+        const allAnalytics = await Analytics.getSummary();
+
+        grid.innerHTML = Object.values(SUBJECTS).map(subject => `
+            <div class="subject-card glass-effect p-6 rounded-2xl cursor-pointer hover:scale-[1.02] transition-all duration-300 group"
+                 data-subject="${subject.id}"
+                 style="border-left: 4px solid ${subject.color};">
+                
+                <!-- Header -->
+                <div class="flex items-start justify-between mb-4">
+                    <div class="flex items-center gap-3">
+                        <div class="w-12 h-12 rounded-xl flex items-center justify-center transition-transform group-hover:scale-110"
+                             style="background: ${subject.color}20;">
+                            <i class="fas ${subject.icon} text-xl" style="color: ${subject.color};"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-white">${subject.name}</h3>
+                            <span class="text-xs text-gray-400">${subject.credits} ECTS • ${subject.code}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Description -->
+                <p class="text-sm text-gray-400 mb-4 line-clamp-2">${subject.description}</p>
+
+                <!-- Stats -->
+                <div class="flex items-center justify-between text-xs">
+                    <span class="flex items-center gap-1 text-emerald-400">
+                        <i class="fas fa-file-pdf"></i>
+                        ${docCounts[subject.id] || 0} docs
+                    </span>
+                    <span class="flex items-center gap-1 text-blue-400">
+                        <i class="fas fa-clock"></i>
+                        ${subject.examType}
+                    </span>
+                </div>
+
+                <!-- Pedagogy Badge -->
+                <div class="mt-4 flex items-center gap-2">
+                    <span class="px-2 py-1 rounded-full text-xs font-medium"
+                          style="background: ${subject.color}20; color: ${subject.color};">
+                        ${subject.pedagogy}
+                    </span>
+                </div>
+
+                <!-- Hover Arrow -->
+                <div class="absolute right-4 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity">
+                    <i class="fas fa-arrow-right text-gray-400"></i>
+                </div>
+            </div>
+        `).join('');
+    },
+
+    async renderAnalytics() {
+        const container = document.getElementById('analytics-container');
+        const statsContainer = document.getElementById('quick-stats');
+        
+        if (!container) return;
+
+        // Get summary stats
+        const summary = await Analytics.getSummary();
+
+        // Render quick stats
+        if (statsContainer) {
+            statsContainer.innerHTML = `
+                <div class="glass-effect p-4 rounded-xl text-center">
+                    <div class="text-2xl font-bold text-emerald-400">${summary.totalStudyTime}</div>
+                    <div class="text-xs text-gray-400">Total Study Time</div>
+                </div>
+                <div class="glass-effect p-4 rounded-xl text-center">
+                    <div class="text-2xl font-bold text-blue-400">${summary.totalQuizzes}</div>
+                    <div class="text-xs text-gray-400">Quizzes Completed</div>
+                </div>
+                <div class="glass-effect p-4 rounded-xl text-center">
+                    <div class="text-2xl font-bold text-purple-400">${summary.averageScore}%</div>
+                    <div class="text-xs text-gray-400">Average Score</div>
+                </div>
+                <div class="glass-effect p-4 rounded-xl text-center">
+                    <div class="text-2xl font-bold text-amber-400">${summary.subjectsActive}/7</div>
+                    <div class="text-xs text-gray-400">Active Subjects</div>
+                </div>
+            `;
+        }
+
+        // Render charts
+        await Analytics.renderDashboard('analytics-container');
+    },
+
+    setupEventListeners() {
+        // Subject card clicks are handled globally in main.js
+    }
+};

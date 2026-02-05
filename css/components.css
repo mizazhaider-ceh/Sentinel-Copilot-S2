@@ -1,0 +1,142 @@
+/* css/components.css */
+
+/* Buttons */
+.btn-primary {
+    background-color: var(--color-accent);
+    color: #000;
+    transition: all 0.3s ease;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+.btn-primary:not(:disabled):hover {
+    background-color: var(--color-accent-hover);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-glow);
+}
+
+.btn-primary:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.btn-glass {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: var(--color-text-primary);
+    transition: all 0.2s ease;
+}
+
+.btn-glass:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+/* Feature Cards */
+.feature-card {
+    border: 1px solid transparent;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    text-align: left;
+    height: 100%;
+}
+
+.feature-card:hover {
+    transform: translateY(-5px);
+    border-color: var(--color-accent);
+    box-shadow: var(--shadow-glow);
+}
+
+.feature-card.active {
+    background: linear-gradient(145deg, var(--color-bg-secondary), rgba(var(--color-accent), 0.1));
+    border-color: var(--color-accent);
+    box-shadow: var(--shadow-glow);
+}
+
+/* Inputs & Textareas */
+input[type="text"],
+input[type="password"],
+textarea,
+select {
+    background: var(--color-bg-secondary);
+    border: 1px solid var(--color-border);
+    color: var(--color-text-primary);
+    transition: all 0.3s ease;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+    outline: none;
+    border-color: var(--color-accent);
+    box-shadow: 0 0 0 2px var(--color-accent-dim);
+}
+
+/* API Status Indicator */
+.api-status {
+    transition: all 0.3s ease;
+}
+
+.api-status.connected {
+    background-color: rgba(16, 185, 129, 0.2);
+    color: #6ee7b7;
+    border: 1px solid rgba(16, 185, 129, 0.5);
+}
+
+.api-status.disconnected {
+    background-color: rgba(239, 68, 68, 0.2);
+    color: #fca5a5;
+    border: 1px solid rgba(239, 68, 68, 0.5);
+}
+
+/* Code Blocks */
+pre[class*="language-"] {
+    background: #1e1e1e !important;
+    border-radius: 8px;
+    margin: 1.5em 0;
+    box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.5);
+}
+
+/* Messages */
+.info-message {
+    @apply bg-blue-500/20 border-l-4 border-blue-500 text-blue-100;
+}
+
+.success-message {
+    @apply bg-emerald-500/20 border-l-4 border-emerald-500 text-emerald-100;
+}
+
+.error-message {
+    @apply bg-red-500/20 border-l-4 border-red-500 text-red-100;
+}
+
+/* Chat Bubbles */
+.chat-bubble-user {
+    background: var(--color-accent-dim);
+    border: 1px solid var(--color-border);
+    color: var(--color-text-primary);
+    border-radius: 1rem;
+    border-top-right-radius: 0;
+    padding: 1rem 1.5rem;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    margin-left: auto;
+    max-width: 80%;
+}
+
+.chat-bubble-ai {
+    background: var(--glass-bg);
+    backdrop-filter: blur(12px);
+    border: var(--glass-border);
+    color: var(--color-text-primary);
+    border-radius: 1rem;
+    border-top-left-radius: 0;
+    padding: 1rem 1.5rem;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    max-width: 80%;
+}
+
+.chat-bubble-ai.error {
+    background: rgba(239, 68, 68, 0.1);
+    border-color: rgba(239, 68, 68, 0.3);
+    color: #fca5a5;
+}

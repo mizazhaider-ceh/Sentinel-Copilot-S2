@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="glass">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="S2-Sentinel Copilot - AI-Powered Study Platform for CS Engineering Semester 2 at Howest University Belgium">
+    <meta name="author" content="Muhammad Izaz Haider (MIHx0)">
+    <meta name="theme-color" content="#10b981">
+    <meta name="color-scheme" content="dark">
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="S2-Sentinel Copilot">
+    <meta property="og:description" content="Hyper-Intelligent AI Study Platform for CS Engineering Semester 2">
+    <meta property="og:type" content="website">
+
+    <title>S2-Sentinel Copilot | Howest Semester 2</title>
+
+    <!-- PWA -->
+    <link rel="manifest" href="manifest.json">
+    
+    <!-- Favicon - Using inline SVG data URI to avoid 404 -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect fill='%2310b981' width='100' height='100' rx='20'/%3E%3Cpath fill='white' d='M50 20L25 35v30l25 15 25-15V35L50 20zm0 10l15 9v18l-15 9-15-9V39l15-9z'/%3E%3C/svg%3E">
+    <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect fill='%2310b981' width='100' height='100' rx='20'/%3E%3Cpath fill='white' d='M50 20L25 35v30l25 15 25-15V35L50 20zm0 10l15 9v18l-15 9-15-9V39l15-9z'/%3E%3C/svg%3E">
+
+    <!-- Preconnect for performance -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
+
+    <!-- Prism.js - Deferred loading -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-javascript.min.js"></script>
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-sql.min.js"></script>
+
+    <!-- Marked.js - Deferred -->
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/marked/9.1.6/marked.min.js"></script>
+
+    <!-- PDF.js - Deferred -->
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+
+    <!-- Chart.js - Deferred -->
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/variables.css">
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/layout.css">
+    <link rel="stylesheet" href="css/markdown.css">
+    <link rel="stylesheet" href="css/animations.css">
+    <link rel="stylesheet" href="css/sentinel.css">
+
+    <style>
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background: linear-gradient(135deg, #0a0a0f 0%, #12121a 50%, #0a0a0f 100%);
+            min-height: 100vh;
+        }
+        
+        /* Smooth scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        /* Focus visible for accessibility */
+        :focus-visible {
+            outline: 2px solid #10b981;
+            outline-offset: 2px;
+        }
+        
+        /* Dialog styling */
+        dialog {
+            border: none;
+            padding: 0;
+            background: transparent;
+            max-width: 90vw;
+        }
+        
+        dialog::backdrop {
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(4px);
+        }
+        
+        /* Reduce motion for accessibility */
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+    </style>
+</head>
+
+<body class="bg-gray-900 text-white antialiased">
+    <!-- Skip to main content for accessibility -->
+    <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-[100] focus:px-4 focus:py-2 focus:bg-emerald-500 focus:text-white focus:rounded-lg">
+        Skip to main content
+    </a>
+
+    <!-- Header / Navigation -->
+    <header class="fixed top-0 left-0 right-0 z-50 glass-dark border-b border-gray-700/50" role="banner">
+        <nav class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between" aria-label="Main navigation">
+            
+            <!-- Logo -->
+            <a href="#/dashboard" class="flex items-center gap-3 group" aria-label="S2-Sentinel Dashboard">
+                <figure class="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-400 to-emerald-600 flex items-center justify-center group-hover:scale-110 transition-transform" aria-hidden="true">
+                    <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+                        <path fill-rule="evenodd" d="M10 2L3 7v6l7 5 7-5V7l-7-5zm0 2.236L14.09 7.5 10 10.764 5.91 7.5 10 4.236z" clip-rule="evenodd"/>
+                    </svg>
+                </figure>
+                <div>
+                    <span class="font-bold text-lg text-white block">
+                        <span class="text-emerald-400">S2</span>-Sentinel
+                    </span>
+                    <span class="text-xs text-gray-400">Howest CS Semester 2</span>
+                </div>
+            </a>
+
+            <!-- Right Actions -->
+            <div class="flex items-center gap-4">
+                
+                <!-- API Status -->
+                <div class="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-full glass-effect" role="status" aria-live="polite">
+                    <span id="api-status-indicator" class="w-2 h-2 rounded-full bg-red-400" aria-hidden="true"></span>
+                    <span id="api-status-text" class="text-xs text-gray-400">Not Connected</span>
+                </div>
+
+                <!-- Theme Toggle -->
+                <button type="button" id="theme-toggle" class="p-2 hover:bg-gray-700/50 rounded-lg transition-colors" aria-label="Toggle theme">
+                    <i class="fas fa-moon text-gray-400" aria-hidden="true"></i>
+                </button>
+
+                <!-- Settings -->
+                <button type="button" id="settings-btn" class="p-2 hover:bg-gray-700/50 rounded-lg transition-colors" aria-label="Open settings">
+                    <i class="fas fa-cog text-gray-400" aria-hidden="true"></i>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main id="main-content" class="pt-20 pb-8 px-4 max-w-7xl mx-auto" role="main" aria-label="Main content">
+        <!-- Loading state - replaced by router -->
+        <div class="flex items-center justify-center h-[60vh]" role="status" aria-label="Loading application">
+            <div class="text-center">
+                <svg class="animate-spin h-12 w-12 text-emerald-400 mx-auto mb-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" aria-hidden="true">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                <p class="text-gray-400">Loading S2-Sentinel...</p>
+            </div>
+        </div>
+    </main>
+
+    <!-- API Configuration Modal -->
+    <dialog id="api-modal" class="modal" aria-labelledby="api-modal-title">
+        <article class="glass-effect rounded-2xl w-full max-w-md p-6 animate-slide-up">
+            
+            <!-- Modal Header -->
+            <header class="flex items-center justify-between mb-6">
+                <div class="flex items-center gap-3">
+                    <figure class="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-400 to-emerald-600 flex items-center justify-center" aria-hidden="true">
+                        <i class="fas fa-key text-white"></i>
+                    </figure>
+                    <div>
+                        <h2 id="api-modal-title" class="font-bold text-lg text-white">Connect AI</h2>
+                        <p class="text-xs text-gray-400">Enter at least one API key</p>
+                    </div>
+                </div>
+                <button type="button" class="modal-close p-2 hover:bg-gray-700/50 rounded-lg transition-colors" aria-label="Close modal">
+                    <i class="fas fa-times text-gray-400" aria-hidden="true"></i>
+                </button>
+            </header>
+
+            <!-- API Keys Form -->
+            <form id="api-form" class="space-y-4" novalidate>
+                
+                <!-- Cerebras -->
+                <fieldset>
+                    <label for="cerebras-api-key" class="text-sm text-gray-400 flex items-center gap-2 mb-1">
+                        <i class="fas fa-brain text-blue-400" aria-hidden="true"></i>
+                        Cerebras API Key
+                        <span class="text-emerald-400 text-xs">(Recommended)</span>
+                    </label>
+                    <input type="password" 
+                           id="cerebras-api-key"
+                           name="cerebras-api-key"
+                           autocomplete="off"
+                           class="w-full bg-gray-800/50 border border-gray-600 rounded-xl px-4 py-3 text-white placeholder-gray-400 focus:border-emerald-400 focus:outline-none transition-colors"
+                           placeholder="csk-xxxxxxxxxxxxxxxxx"
+                           aria-describedby="cerebras-help">
+                    <a id="cerebras-help" href="https://cloud.cerebras.ai/" target="_blank" rel="noopener noreferrer"
+                       class="text-xs text-emerald-400 hover:underline mt-1 inline-block">
+                        Get free key at cloud.cerebras.ai →
+                    </a>
+                </fieldset>
+
+                <!-- Gemini -->
+                <fieldset>
+                    <label for="gemini-api-key" class="text-sm text-gray-400 flex items-center gap-2 mb-1">
+                        <i class="fab fa-google text-amber-400" aria-hidden="true"></i>
+                        Gemini API Key
+                    </label>
+                    <input type="password" 
+                           id="gemini-api-key"
+                           name="gemini-api-key"
+                           autocomplete="off"
+                           class="w-full bg-gray-800/50 border border-gray-600 rounded-xl px-4 py-3 text-white placeholder-gray-400 focus:border-emerald-400 focus:outline-none transition-colors"
+                           placeholder="AIzaxxxxxxxxxxxxxxxxx"
+                           aria-describedby="gemini-help">
+                    <a id="gemini-help" href="https://aistudio.google.com/apikey" target="_blank" rel="noopener noreferrer"
+                       class="text-xs text-emerald-400 hover:underline mt-1 inline-block">
+                        Get free key at aistudio.google.com →
+                    </a>
+                </fieldset>
+
+                <!-- Buttons -->
+                <div class="flex gap-3 pt-4">
+                    <button type="button" id="demo-mode-btn" 
+                            class="flex-1 py-3 border border-gray-600 text-gray-400 rounded-xl hover:bg-gray-700/50 transition-colors">
+                        <i class="fas fa-play-circle mr-2" aria-hidden="true"></i>Demo Mode
+                    </button>
+                    <button type="submit" id="save-api-keys" 
+                            class="flex-1 py-3 bg-gradient-to-r from-emerald-500 to-emerald-600 text-white rounded-xl font-medium hover:from-emerald-600 hover:to-emerald-700 transition-all">
+                        <i class="fas fa-plug mr-2" aria-hidden="true"></i>Connect
+                    </button>
+                </div>
+            </form>
+        </article>
+    </dialog>
+
+    <!-- Settings Modal -->
+    <dialog id="settings-modal" class="modal" aria-labelledby="settings-modal-title">
+        <article class="glass-effect rounded-2xl w-full max-w-lg p-6 animate-slide-up">
+            
+            <!-- Modal Header -->
+            <header class="flex items-center justify-between mb-6">
+                <h2 id="settings-modal-title" class="font-bold text-lg text-white flex items-center gap-2">
+                    <i class="fas fa-cog text-emerald-400" aria-hidden="true"></i>
+                    Settings
+                </h2>
+                <button type="button" class="modal-close p-2 hover:bg-gray-700/50 rounded-lg transition-colors" aria-label="Close settings">
+                    <i class="fas fa-times text-gray-400" aria-hidden="true"></i>
+                </button>
+            </header>
+
+            <!-- Settings Content -->
+            <div class="space-y-6">
+                
+                <!-- API Section -->
+                <section class="glass-effect p-4 rounded-xl" aria-labelledby="api-settings-heading">
+                    <h3 id="api-settings-heading" class="font-bold text-white mb-3 flex items-center gap-2">
+                        <i class="fas fa-key text-emerald-400" aria-hidden="true"></i>
+                        API Configuration
+                    </h3>
+                    <button type="button" id="open-api-modal" 
+                            class="w-full py-2 border border-gray-600 text-gray-400 rounded-lg hover:bg-gray-700/50 transition-colors text-sm">
+                        <i class="fas fa-edit mr-2" aria-hidden="true"></i>Edit API Keys
+                    </button>
+                </section>
+
+                <!-- Data Management -->
+                <section class="glass-effect p-4 rounded-xl" aria-labelledby="data-settings-heading">
+                    <h3 id="data-settings-heading" class="font-bold text-white mb-3 flex items-center gap-2">
+                        <i class="fas fa-database text-emerald-400" aria-hidden="true"></i>
+                        Data Management
+                    </h3>
+                    <div class="space-y-2">
+                        <button type="button" id="export-data-btn" 
+                                class="w-full py-2 border border-gray-600 text-gray-400 rounded-lg hover:bg-gray-700/50 transition-colors text-sm">
+                            <i class="fas fa-download mr-2" aria-hidden="true"></i>Export All Data
+                        </button>
+                        <button type="button" id="clear-data-btn" 
+                                class="w-full py-2 border border-red-600/50 text-red-400 rounded-lg hover:bg-red-500/10 transition-colors text-sm">
+                            <i class="fas fa-trash mr-2" aria-hidden="true"></i>Clear All Data
+                        </button>
+                    </div>
+                </section>
+
+                <!-- About -->
+                <footer class="text-center text-xs text-gray-500">
+                    <p class="mb-1">S2-Sentinel Copilot v1.0.0</p>
+                    <p>Built for Howest CS Engineering Semester 2</p>
+                </footer>
+            </div>
+        </article>
+    </dialog>
+
+    <!-- Toast Notification Container -->
+    <aside id="toast-container" class="fixed bottom-4 right-4 z-50 space-y-2" role="alert" aria-live="assertive" aria-atomic="true">
+        <!-- Toasts appended dynamically via JavaScript -->
+    </aside>
+
+    <!-- No JavaScript Fallback -->
+    <noscript>
+        <div class="fixed inset-0 bg-gray-900 flex items-center justify-center z-[100]">
+            <div class="text-center p-8">
+                <h1 class="text-2xl font-bold text-white mb-4">JavaScript Required</h1>
+                <p class="text-gray-400">S2-Sentinel Copilot requires JavaScript to function. Please enable JavaScript in your browser settings.</p>
+            </div>
+        </div>
+    </noscript>
+
+    <!-- Application Scripts (ES Modules) -->
+    <script type="module" src="js/main.js"></script>
+
+    <!-- Modal Handlers (Modern JS) -->
+    <script type="module">
+        // Use modern dialog API
+        const apiModal = document.getElementById('api-modal');
+        const settingsModal = document.getElementById('settings-modal');
+        
+        // Settings button opens settings modal
+        document.getElementById('settings-btn')?.addEventListener('click', () => {
+            settingsModal?.showModal();
+        });
+        
+        // Open API modal from settings
+        document.getElementById('open-api-modal')?.addEventListener('click', () => {
+            settingsModal?.close();
+            apiModal?.showModal();
+        });
+        
+        // Close buttons
+        document.querySelectorAll('.modal-close').forEach(btn => {
+            btn.addEventListener('click', () => {
+                btn.closest('dialog')?.close();
+            });
+        });
+        
+        // Close on backdrop click
+        [apiModal, settingsModal].forEach(modal => {
+            modal?.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    modal.close();
+                }
+            });
+        });
+        
+        // Prevent form submission, handle via JS
+        document.getElementById('api-form')?.addEventListener('submit', (e) => {
+            e.preventDefault();
+            // Trigger the save handler in main.js
+            document.getElementById('save-api-keys')?.dispatchEvent(new Event('click', { bubbles: true }));
+        });
+    </script>
+</body>
+</html>

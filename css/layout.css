@@ -1,0 +1,21 @@
+/* css/layout.css */
+
+.mode-transition {
+    animation: fadeIn 0.4s ease-in-out;
+}
+
+/* Responsive Grid Overrides if needed beyond utility classes */
+@media (max-width: 768px) {
+    .feature-card {
+        padding: 1rem;
+    }
+
+    header h1 {
+        font-size: 1.5rem;
+    }
+}
+
+.chat-container {
+    scroll-behavior: smooth;
+    /* Custom scrollbar handling for chat logic */
+}
