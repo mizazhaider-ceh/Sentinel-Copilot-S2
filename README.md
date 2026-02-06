@@ -158,63 +158,39 @@ uvicorn main:app --reload
 
 ---
 
-## 💡 Powerful Features
+## The Powerful Combination
 
-<table>
-<tr>
-<td width="33%" align="center">
+> **S2-Sentinel isn't just a study tool—it's a convergence of multiple engineering disciplines into one cohesive platform.**
 
-### 🤖 **Smart AI**
-Context-aware responses<br>
-Upload PDFs for custom learning<br>
-Multi-model support
+This project represents the intersection of **six distinct technical domains**, each reinforcing the others:
 
-</td>
-<td width="33%" align="center">
+```
+┌─────────────────────────────────────────────────────────────────────┐
+│                    S2-SENTINEL COPILOT                            │
+│     Where Cybersecurity Meets Intelligent Engineering             │
+└─────────────────────────────────────────────────────────────────────┘
+```
 
-### 🛠️ **24+ Tools**
-Subnet Calculator<br>
-JWT Decoder<br>
-Regex Tester<br>
-*...and many more!*
+| Domain | Application in S2-Sentinel | Depth |
+|--------|---------------------------|-------|
+| **Cybersecurity Knowledge** | Pre-built prompts for 8 security domains, attack-chain pedagogy, CTF training tools, pentesting utilities | Deep domain expertise |
+| **AI & RAG Integration** | Hybrid retrieval (TF-IDF + BM25 + ChromaDB vectors), multi-model abstraction (Cerebras + Gemini), streaming SSE, context-aware prompt engineering | Production-grade AI pipeline |
+| **Full-Stack Web Development** | Vanilla JS SPA (zero dependencies), Python FastAPI backend, RESTful APIs, IndexedDB persistence, service worker PWA | End-to-end engineering |
+| **UI/UX Design** | 12-theme design system, glassmorphism aesthetics, responsive 320px–4K, accessibility-first, CSS custom properties architecture | Professional-grade design |
+| **Project Management** | 6-phase development roadmap, semantic versioning, modular architecture planning, feature prioritization | Structured delivery |
+| **Software Engineering Practices** | Clean git history (100+ meaningful commits), modular file architecture (46 files), comprehensive documentation, MIT licensing | Industry-standard workflow |
 
-</td>
-<td width="33%" align="center">
+### Why This Combination Matters
 
-### 📊 **Analytics**
-Study time tracking<br>
-Quiz performance<br>
-Weak topic detection
+Most student projects demonstrate **one** skill. S2-Sentinel demonstrates the ability to:
 
-</td>
-</tr>
-<tr>
-<td width="33%" align="center">
+1. **Identify a real problem** through user research and personal experience
+2. **Architect a scalable solution** with clean separation of concerns
+3. **Implement across the full stack** — frontend, backend, AI pipeline, and infrastructure
+4. **Deliver production-quality code** with proper documentation and version control
+5. **Iterate based on feedback** through multiple development phases (v1.0 → v2.0.2)
 
-### 💬 **Chat System**
-Streaming responses<br>
-Conversation history<br>
-Export chats (JSON/HTML/PDF)
-
-</td>
-<td width="33%" align="center">
-
-### 📝 **Smart Quizzes**
-4 question types<br>
-Spaced repetition<br>
-Auto-grading
-
-</td>
-<td width="33%" align="center">
-
-### 🎯 **Personalized**
-8 teaching styles<br>
-Adaptive pedagogy<br>
-Your pace, your way
-
-</td>
-</tr>
-</table>
+This isn't a tutorial project copied from YouTube. It's an **original system** built from scratch to solve a real problem, combining **cybersecurity domain expertise** with **modern software engineering** and **AI integration**.
 
 ---
 
@@ -275,101 +251,125 @@ graph TB
 
 ---
 
-## � Why We Built This
+## Project Genesis
+
+### How It Started
+
+It began with **[Study Copilot](https://github.com/mizazhaider-ceh/Study-Copilot)**—a personal AI tutor I built to make my own study sessions more productive. It worked. But as Semester 2 at Howest started, I realized the problem was bigger than I thought.
+
+Students were:
+- Losing hours switching between ChatGPT, Google, and five different tools
+- Forgetting which conversation had the answer they needed
+- Getting generic responses from AI that didn't understand their coursework
+- Studying without any way to measure progress or identify weak areas
+
+Study Copilot was a good foundation, but Semester 2 needed something **purpose-built**—something that understood the curriculum, had the right tools baked in, and could track your learning journey from day one.
+
+That's when S2-Sentinel Copilot was born.
+
+### The Effort Behind It
+
+This project took **significant time and dedication**—countless late nights, debugging sessions, architecture rewrites, and feature iterations. From the first line of code to the 11,707th, every decision was intentional.
+
+**Alhamdulillah**, it's done. And it works.
+
+But more importantly, it was built with a philosophy: **tools should adapt to students, not the other way around.**
+
+---
+
+## The Road Ahead
+
+> **S2-Sentinel doesn't stop here.**
+
+This platform is designed to **evolve**. The modular architecture, clean codebase, and extensible configuration system were built with the future in mind.
+
+**Planned Evolution:**
+
+| Phase | Goal | Status |
+|-------|------|--------|
+| Multi-Semester Support | Expand beyond S2 to cover full degree programs | Planned |
+| Collaborative Learning | Real-time study rooms and shared notes | Researching |
+| Advanced Analytics | ML-powered study pattern optimization | Designed |
+| Mobile Application | React Native companion app | Planned |
+| Institutional API | University-level deployment and LMS integration | Architected |
+| Plugin Marketplace | Community-contributed tools and course packs | Conceptualized |
+
+**The vision**: From a single-semester study companion to a **comprehensive learning OS** for cybersecurity professionals worldwide.
+
+Every commit brings it closer. Every user's feedback shapes its direction.
+
+---
+
+## Documentation
+
+| Document | Purpose |
+|----------|----------|
+| **[TECHNICAL.md](TECHNICAL.md)** | Full technical details, codebase statistics & architecture |
+| **[HOW_IT_WORKS.md](docs/HOW_IT_WORKS.md)** | System architecture deep-dive |
+| **[DEVELOPMENT-PHASES.md](docs/DEVELOPMENT-PHASES.md)** | Complete 6-phase development journey |
+
+---
+
+## Contributors & Collaboration
 
 <div align="center">
 
-### The Story Behind S2-Sentinel
-
-After building **[Study Copilot](https://github.com/mizazhaider-ceh/Study-Copilot)**, we noticed critical problems students face in **Semester 2** at Howest:
+### Core Team
 
 </div>
 
-**🚨 Problems We Identified:**
-- ⏰ **Time Wasting**: Switching between multiple AI platforms
-- 🤔 **Lost Context**: Forgetting which chat session had important info
-- 📚 **Scattered Notes**: Study materials spread across different apps
-- 🔄 **No Continuity**: Can't resume where you left off
-- 📊 **No Tracking**: No way to measure study progress
-- 🎯 **Generic AI**: Tools don't understand your specific courses
+**[Muhammad Izaz Haider (MIHx0)](https://github.com/mizazhaider-ceh)** — Creator & Lead Developer
+- Designed and implemented the full-stack architecture from scratch
+- Built the hybrid RAG engine, AI abstraction layer, and 24+ tool suite
+- Managed the complete development lifecycle across 6 phases
+- Authored all documentation and technical specifications
 
-**✨ Our Solution: S2-Sentinel Copilot**
+**[Masud Rana](https://github.com/masudrana-ceh)** — Contributor & Collaborator
+- Proposed key feature ideas that shaped the platform's direction
+- Provided critical UX feedback during early development cycles
+- Suggested tool selections and interface improvements that improved usability
+- Tested features and reported issues that led to stability improvements
+- A true collaborator whose perspective helped S2-Sentinel become what it is today
 
-A **unified platform** purpose-built for Howest Cybersecurity Engineering Semester 2:
-- 🎯 **Course-Aware**: Knows your exact curriculum (Computer Networks, Web Pentesting, etc.)
-- 💾 **Everything Saved**: All chats, notes, and progress in one place
-- 🚀 **Fast & Free**: Powered by Cerebras (1000+ tokens/sec)
-- 🛠️ **24+ Built-in Tools**: Subnet calculator, JWT decoder, regex tester, and more
-- 📈 **Track Progress**: See exactly how much you've studied
-- 🎨 **Beautiful UX**: Actually enjoyable to use
+### Our Collaboration
 
-**🌍 Built for Everyone**
+S2-Sentinel was built through genuine collaboration. While I (Izaz) handled the engineering, Masud was the sounding board who challenged ideas, suggested better approaches, and kept the user experience honest. The best features in this platform—the tool selection, the intuitive UI flow, the focus on practical utility—came from our discussions about what **we as students actually needed**, not just what looked impressive technically.
 
-While originally designed for Howest Semester 2, S2-Sentinel works for **any cybersecurity learner**:
-- ✅ Upload your own course materials (PDFs, notes, slides)
-- ✅ Works with any cybersecurity curriculum
-- ✅ Adaptable to your learning style and pace
-- ✅ Universal tools (subnet calc, JWT decoder, regex tester, etc.)
-- ✅ Multi-language support ready
+Building something together is always better than building alone.
 
-**From a university project → A solution for all cybersecurity learners worldwide** 🌍🚀
+### Acknowledgments
+
+- **Howest University Belgium** — For the world-class Cybersecurity Engineering program that inspired this project
+- **Cerebras AI** — For providing lightning-fast inference API (1000+ tokens/sec)
+- **Google Gemini** — For powerful AI capabilities as a secondary model
+- **Fellow Students** — Beta testers who provided invaluable feedback during development
+- **Open Source Community** — For the libraries and tools that made this possible
 
 ---
 
-## �📖 Need More Info?
-
-| 📄 Document | 🎯 Purpose |
-|-------------|-----------|
-| **[TECHNICAL.md](TECHNICAL.md)** | Full technical details & architecture |
-| **[HOW_IT_WORKS.md](docs/HOW_IT_WORKS.md)** | System architecture explained |
-| **[DEVELOPMENT-PHASES.md](docs/DEVELOPMENT-PHASES.md)** | Complete development journey |
-
----
-
-## 🤝 Contributors & Acknowledgments
-
-<div align="center">
-
-### 👨‍💻 Core Team
-
-**[Muhammad Izaz Haider (MIHx0)](https://github.com/mizazhaider-ceh)** — *Creator & Lead Developer*
-
-### 💡 Special Thanks
-
-**[Masud Rana](https://github.com/masudrana-ceh)** — *Feature Ideas & User Experience Feedback*  
-*Contributed valuable insights for tools selection, UI/UX improvements, and feature suggestions that shaped S2-Sentinel*
-
-</div>
-
-### 🙏 Acknowledgments
-
-- 🏫 **Howest University Belgium** — For the amazing Cybersecurity Engineering program
-- 🤖 **Cerebras AI** — For providing lightning-fast free API
-- 🌟 **Google Gemini** — For powerful AI capabilities
-- 👥 **Beta Testers** — Fellow students who provided feedback during development
-- 📚 **Open Source Community** — For the amazing libraries that made this possible
-
----
-
-## 🎓 About the Creator
+## About the Creator
 
 <div align="center">
 
 **Muhammad Izaz Haider (MIHx0)**
 
-*Cybersecurity Student @ Howest University Belgium 🇧🇪*  
-*Junior DevSecOps & AI Security Engineer @ Damno Solutions*  
-*Founder of The PenTrix*
+Cybersecurity Student @ Howest University Belgium  
+Junior DevSecOps & AI Security Engineer @ Damno Solutions  
+Founder of The PenTrix
 
-**🎯 Mission**: Helping students master cybersecurity through AI-powered learning
-
-**🚀 Vision**: Making education accessible, personalized, and effective for everyone
+*From a small village in Pakistan to the European tech frontier*
 
 </div>
 
+**Background**: A cybersecurity student who saw a gap between available tools and actual student needs. Instead of waiting for someone else to solve it, I built the solution—twice. First [Study Copilot](https://github.com/mizazhaider-ceh/Study-Copilot), then S2-Sentinel.
+
+**Philosophy**:
+> *"If you can't explain it simply, you don't understand it well enough."*  
+> Build tools that make complex subjects approachable. Write code that others can read. Ship products that actually solve problems.
+
 ---
 
-## 🔗 Connect With Me
+## Connect
 
 <div align="center">
 
@@ -381,38 +381,32 @@ While originally designed for Howest Semester 2, S2-Sentinel works for **any cyb
 
 ---
 
-## 💬 Support This Project
+## Support & Contributing
 
-<div align="center">
+If S2-Sentinel has been useful to you:
 
-If S2-Sentinel helped you ace your exams:
+- **Star** this repository to help others discover it
+- **Fork** and submit PRs for improvements or new features
+- **Open issues** for bugs, feature requests, or curriculum suggestions
+- **Share** with fellow cybersecurity students and professionals
 
-⭐ **Star** this repository to show your support  
-🔄 **Share** with fellow cybersecurity students  
-💡 **Contribute** improvements or new features  
-📣 **Spread** the word in your study groups
-
-### Every star motivates me to build better tools! 🙏
-
-</div>
+Contributions welcome. See [TECHNICAL.md](TECHNICAL.md) for architecture details before contributing.
 
 ---
 
-## 📜 License
+## License
 
-MIT License — Free to use, modify, and share!
+MIT License — Free to use, modify, and distribute.
 
 ---
 
 <div align="center">
 
-<img src="https://img.shields.io/badge/Made%20with-💻%20%26%20☕-red?style=for-the-badge" alt="Made with love"/>
+**Built with purpose. Engineered with discipline. Shipped with pride.**
 
-**Built by a cybersecurity student, for cybersecurity students**
+*From a university problem → To a global solution*
 
-*Transform your study sessions from boring to brilliant! 🚀*
-
-### Ready to level up your learning? [Open index.html](#) and start now! ✨
+[Get Started](#quick-start) • [Read the Docs](TECHNICAL.md) • [View Architecture](#system-architecture)
 
 </div>
 
