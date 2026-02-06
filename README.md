@@ -3,7 +3,7 @@
 > **Hyper-Intelligent AI Study Platform for CS Engineering Semester 2**  
 > Built specifically for Howest University Belgium
 
-![Version](https://img.shields.io/badge/version-2.0.0-emerald)
+![Version](https://img.shields.io/badge/version-2.0.1-emerald)
 ![Phase](https://img.shields.io/badge/phase-6%2F6%20%2B%20features-brightgreen)
 ![Courses](https://img.shields.io/badge/courses-8-purple)
 ![Lines](https://img.shields.io/badge/lines-12.5k%2B-blue)
@@ -213,6 +213,26 @@ Ask questions, use tools, take quizzes, track your progress
 - [x] **Enhanced Theme Grid** — Visual previews already implemented
   - All 12 themes display gradient backgrounds
   - Active state indicators & hover transitions
+
+### Enhancement Round (v2.0.1) ✅
+
+**Phase: UX & Performance Improvements**
+
+- [x] **Prism.js Autoloader** — Dynamic syntax highlighting for code blocks
+  - Automatically loads syntax highlighter for any programming language on-demand
+  - Replaces manual language component loading (python, bash, javascript, sql)
+  - Supports 200+ languages without bloating initial page load
+  - CDN-based component fetching with intelligent caching
+  - Zero configuration required - works automatically with markdown code blocks
+
+- [x] **sessionStorage Mode Persistence** — Session-based state restoration
+  - Restores active view (dashboard vs workspace) on page refresh
+  - Remembers current subject selection during browser session
+  - Preserves active tab (chat/docs/tools/quiz) in workspace
+  - Automatic cleanup when browser/tab closes (unlike localStorage)
+  - Seamless UX - users don't lose context on accidental refresh
+  - Added `clearSessionState()` method for explicit state reset
+  - Separate from localStorage (API keys, theme) which persists permanently
 
 ---
 

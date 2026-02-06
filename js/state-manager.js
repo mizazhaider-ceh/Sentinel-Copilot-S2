@@ -18,6 +18,11 @@ class StateManager {
         const savedSubject = localStorage.getItem(CONSTANTS.STORAGE_KEYS.ACTIVE_SUBJECT);
         const savedSettings = JSON.parse(localStorage.getItem(CONSTANTS.STORAGE_KEYS.SETTINGS) || '{}');
 
+        // Load session-specific state from sessionStorage (persists only for current session)
+        const sessionView = sessionStorage.getItem('s2-current-view');
+        const sessionSubject = sessionStorage.getItem('s2-current-subject');
+        const sessionTab = sessionStorage.getItem('s2-current-tab');
+
         return {
             // API Configuration
             apiKeys: {
@@ -29,10 +34,10 @@ class StateManager {
             selectedModel: savedSettings.selectedModel || CONSTANTS.DEFAULT_MODEL_CEREBRAS,
             isDemo: false,
 
-            // Navigation State
-            currentView: 'dashboard', // 'dashboard' | 'workspace'
-            currentSubject: savedSubject || null,
-            currentTab: 'chat', // 'chat' | 'docs' | 'tools' | 'quiz'
+            // Navigation State (restored from sessionStorage if available)
+            currentView: sessionView || 'dashboard', // 'dashboard' | 'workspace'
+            currentSubject: sessionSubject || savedSubject || null,
+            currentTab: sessionTab || 'chat', // 'chat' | 'docs' | 'tools' | 'quiz'
 
             // UI State
             theme: savedTheme,
@@ -116,6 +121,7 @@ class StateManager {
      * Persist specific state keys to localStorage
      */
     persistState(updates) {
+        // localStorage - Permanent persistence
         if (updates.apiKeys?.cerebras) {
             localStorage.setItem(CONSTANTS.STORAGE_KEYS.CEREBRAS_KEY, updates.apiKeys.cerebras);
         }
@@ -134,6 +140,21 @@ class StateManager {
         }
         if (updates.settings) {
             localStorage.setItem(CONSTANTS.STORAGE_KEYS.SETTINGS, JSON.stringify(this.state.settings));
+        }
+
+        // sessionStorage - Session-only persistence (cleared when browser/tab closes)
+        if (updates.currentView !== undefined) {
+            sessionStorage.setItem('s2-current-view', updates.currentView);
+        }
+        if (updates.currentSubject !== undefined) {
+            if (updates.currentSubject) {
+                sessionStorage.setItem('s2-current-subject', updates.currentSubject);
+            } else {
+                sessionStorage.removeItem('s2-current-subject');
+            }
+        }
+        if (updates.currentTab !== undefined) {
+            sessionStorage.setItem('s2-current-tab', updates.currentTab);
         }
     }
 
@@ -240,6 +261,17 @@ class StateManager {
             ...data
         };
         this.setState({ analytics });
+    }
+
+    /**
+     * Clear session-only state (sessionStorage)
+     * Useful for explicit navigation reset or logout
+     */
+    clearSessionState() {
+        sessionStorage.removeItem('s2-current-view');
+        sessionStorage.removeItem('s2-current-subject');
+        sessionStorage.removeItem('s2-current-tab');
+        console.log('[AppState] Session state cleared');
     }
 }
 

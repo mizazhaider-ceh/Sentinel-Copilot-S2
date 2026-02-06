@@ -121,6 +121,14 @@ document.addEventListener('DOMContentLoaded', async () => {
             console.log('[Init] PDF.js worker configured');
         }
 
+        // Configure Prism.js autoloader for automatic language loading
+        if (typeof Prism !== 'undefined') {
+            // Set CDN path for autoloader to fetch language components
+            Prism.plugins.autoloader.languages_path = 
+                'https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/';
+            console.log('[Init] Prism.js autoloader configured');
+        }
+
         // Setup routing
         setupRouter();
 
