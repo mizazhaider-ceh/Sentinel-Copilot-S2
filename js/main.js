@@ -492,12 +492,18 @@ function setupAbout() {
         <div class="grid grid-cols-1 md:grid-cols-12 gap-8">
             <!-- Left Column: Creator Profile -->
             <div class="md:col-span-5 text-center md:text-left border-b md:border-b-0 md:border-r border-white/10 pb-6 md:pb-0 md:pr-6">
-                <div class="relative w-32 h-32 mx-auto md:mx-0 mb-6 group">
-                    <div class="absolute inset-0 bg-emerald-500 rounded-full blur opacity-40 group-hover:opacity-60 transition-opacity"></div>
-                    <div class="relative w-full h-full rounded-full border-4 border-gray-800 shadow-2xl bg-gradient-to-br from-emerald-400 to-emerald-600 flex items-center justify-center overflow-hidden">
-                        <i class="fas fa-user text-white text-5xl"></i>
+                <div class="relative w-36 h-36 mx-auto md:mx-0 mb-6 group">
+                    <div class="absolute inset-0 bg-gradient-to-br from-emerald-500 via-emerald-400 to-cyan-500 rounded-full blur-xl opacity-50 group-hover:opacity-70 transition-opacity animate-pulse"></div>
+                    <div class="relative w-full h-full rounded-full border-4 border-emerald-400/50 shadow-2xl overflow-hidden ring-2 ring-gray-800 group-hover:border-emerald-400 transition-all duration-300">
+                        <img src="images/profile.png" 
+                             alt="${creator.name}" 
+                             class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                             onerror="this.onerror=null; this.style.display='none'; this.nextElementSibling.style.display='flex';"/>
+                        <div class="hidden w-full h-full bg-gradient-to-br from-emerald-400 to-emerald-600 items-center justify-center">
+                            <i class="fas fa-user text-white text-5xl"></i>
+                        </div>
                     </div>
-                    <span class="absolute bottom-0 right-0 bg-emerald-500 text-black text-xs font-bold px-2 py-1 rounded-full border border-black shadow-lg">
+                    <span class="absolute bottom-0 right-0 bg-gradient-to-r from-emerald-500 to-cyan-500 text-white text-xs font-bold px-3 py-1.5 rounded-full border-2 border-gray-900 shadow-lg animate-bounce-slow">
                         ${creator.alias}
                     </span>
                 </div>
