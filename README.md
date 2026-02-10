@@ -10,7 +10,7 @@
 
 **A production-ready solution addressing real-world learning challenges for cybersecurity professionals and students worldwide**
 
-*Originally developed for Howest University Belgium CS Engineering • Now serving global learners*
+*Originally developed By M Izaz Haider for Howest University Belgium CS Engineering • Now serving global learners*
 
 <br>
 
