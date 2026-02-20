@@ -450,3 +450,11 @@ MIT License — Free to use, modify, and distribute.
 
 </div>
 
+<div align="center">
+
+
+![Visitors](https://api.visitorbadge.io/api/visitors?path=mizazhaider-ceh%2FX-Recon&label=Visitors&countColor=%2300f3ff)
+
+</div>
+
+
