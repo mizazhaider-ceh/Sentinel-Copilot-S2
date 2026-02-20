@@ -40,7 +40,6 @@
 <td>
 
 **🛠️ Technical Excellence**
-- **11,707 lines** of production code across **46 modular files**
 - **Full-stack architecture**: Vanilla JavaScript SPA + Python FastAPI backend
 - **Hybrid RAG engine**: TF-IDF + ChromaDB vector search + BM25 ranking
 - **Real-time streaming**: Server-Sent Events (SSE) for responsive AI interactions
