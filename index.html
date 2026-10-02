@@ -480,6 +480,17 @@
     <!-- Application Scripts (ES Modules) -->
     <script type="module" src="js/main.js"></script>
 
+    <!-- Service Worker: offline-first PWA caching -->
+    <script>
+        if ('serviceWorker' in navigator && location.protocol !== 'file:') {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js').catch((err) => {
+                    console.warn('[SW] Registration failed:', err);
+                });
+            });
+        }
+    </script>
+
     <!-- Modal Handlers (Modern JS) -->
     <script type="module">
         // Use modern dialog API
@@ -568,7 +579,7 @@
                         <li><a href="https://howest.be" target="_blank" rel="noopener noreferrer" class="hover:text-emerald-400 transition-colors">Howest University</a></li>
                         <li><a href="https://cloud.cerebras.ai" target="_blank" rel="noopener noreferrer" class="hover:text-emerald-400 transition-colors">Cerebras AI</a></li>
                         <li><a href="https://aistudio.google.com" target="_blank" rel="noopener noreferrer" class="hover:text-emerald-400 transition-colors">Google AI Studio</a></li>
-                        <li><a href="https://github.com/MIHx0/S2-Sentinel-Copilot" target="_blank" rel="noopener noreferrer" class="hover:text-emerald-400 transition-colors">Source Code</a></li>
+                        <li><a href="https://github.com/mizazhaider-ceh/Sentinel-Copilot-S2" target="_blank" rel="noopener noreferrer" class="hover:text-emerald-400 transition-colors">Source Code</a></li>
                     </ul>
                 </div>
 

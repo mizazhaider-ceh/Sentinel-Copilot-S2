@@ -147,7 +147,7 @@ export const ApiService = {
                         );
 
                         if (useCache && !stream) {
-                            const cacheKey = ResponseCache.generateKey(systemPrompt, userPrompt, model);
+                            const cacheKey = ResponseCache.generateKey(systemPrompt, userPrompt, 'gemini');
                             ResponseCache.set(cacheKey, response);
                         }
 

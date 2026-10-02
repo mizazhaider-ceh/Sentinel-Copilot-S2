@@ -28,7 +28,7 @@ from typing import Optional
 from contextlib import asynccontextmanager
 
 import httpx
-from fastapi import FastAPI, File, UploadFile, Form, HTTPException, status, Query
+from fastapi import FastAPI, File, UploadFile, Form, HTTPException, status, Query, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel, Field
@@ -57,6 +57,31 @@ logger.add(
     retention="7 days",
     level="DEBUG"
 )
+
+# ═══════════════════════════════════════════════════════════════════════════
+# SIMPLE IN-MEMORY RATE LIMITER (protects the web-search proxy endpoint)
+# ═══════════════════════════════════════════════════════════════════════════
+
+from collections import defaultdict
+import time
+
+_rate_limit_hits: dict = defaultdict(list)
+RATE_LIMIT_WINDOW_SECONDS = 60
+RATE_LIMIT_MAX_REQUESTS = 30  # 30 requests per minute per client IP
+
+
+def check_rate_limit(client_id: str) -> bool:
+    """Return True if the request is allowed, False if the client is over the limit."""
+    now = time.monotonic()
+    hits = _rate_limit_hits[client_id]
+    # Drop hits outside the window
+    while hits and now - hits[0] > RATE_LIMIT_WINDOW_SECONDS:
+        hits.pop(0)
+    if len(hits) >= RATE_LIMIT_MAX_REQUESTS:
+        return False
+    hits.append(now)
+    return True
+
 
 # ═══════════════════════════════════════════════════════════════════════════
 # PYDANTIC MODELS (Request/Response Validation)
@@ -387,13 +412,22 @@ class WebSearchResponse(BaseModel):
 
 @app.get("/api/search", response_model=WebSearchResponse, tags=["Search"])
 async def web_search(
+    request: Request,
     q: str = Query(..., min_length=1, max_length=500, description="Search query"),
     max_results: int = Query(default=5, ge=1, le=10, description="Max results")
 ):
     """
     Proxy web search endpoint - searches DuckDuckGo and Wikipedia.
     Solves CORS issues by making requests server-side.
+    Rate-limited per client IP to prevent abuse.
     """
+    client_ip = request.client.host if request.client else "unknown"
+    if not check_rate_limit(f"websearch:{client_ip}"):
+        raise HTTPException(
+            status_code=status.HTTP_429_TOO_MANY_REQUESTS,
+            detail="Rate limit exceeded. Please wait a moment and try again."
+        )
+
     results = []
     
     async with httpx.AsyncClient(timeout=10.0) as client:

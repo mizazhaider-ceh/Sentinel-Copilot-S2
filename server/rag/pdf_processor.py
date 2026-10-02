@@ -101,7 +101,7 @@ class PDFProcessor:
             chunks = self.chunker.chunk_text(page_text, page_num, filename)
 
             if not chunks:
-                logger.debug(f\"No chunks produced for page {page_num} of {filename}\")
+                logger.debug(f"No chunks produced for page {page_num} of {filename}")
                 continue
 
             for chunk in chunks:

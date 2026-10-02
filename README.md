@@ -276,7 +276,7 @@ graph TB
 - Debounced auto-save preventing excessive storage operations
 - Optimized IndexedDB queries with compound indexes
 
-*Full technical changelog available in [TECHNICAL.md](TECHNICAL.md)*
+*Full technical changelog available in [TECHNICAL.md](docs/TECHNICAL.md)*
 
 ---
 
@@ -333,7 +333,7 @@ Every commit brings it closer. Every user's feedback shapes its direction.
 
 | Document | Purpose |
 |----------|----------|
-| **[TECHNICAL.md](TECHNICAL.md)** | Full technical details, codebase statistics & architecture |
+| **[TECHNICAL.md](docs/TECHNICAL.md)** | Full technical details, codebase statistics & architecture |
 | **[HOW_IT_WORKS.md](docs/HOW_IT_WORKS.md)** | System architecture deep-dive |
 | **[DEVELOPMENT-PHASES.md](docs/DEVELOPMENT-PHASES.md)** | Complete 6-phase development journey |
 
@@ -424,7 +424,7 @@ If S2-Sentinel has been useful to you:
 - 💬 **Open issues** for bugs, feature requests, or curriculum suggestions
 - 📣 **Share** with fellow cybersecurity students and professionals
 
-Contributions welcome. See [TECHNICAL.md](TECHNICAL.md) for architecture details before contributing.
+Contributions welcome. See [TECHNICAL.md](docs/TECHNICAL.md) for architecture details before contributing.
 
 ---
 
@@ -442,7 +442,7 @@ MIT License — Free to use, modify, and distribute.
 
 *From a university problem → To a global solution*
 
-[Get Started](#-quick-start) • [Read the Docs](TECHNICAL.md) • [View Architecture](#-system-architecture)
+[Get Started](#-quick-start) • [Read the Docs](docs/TECHNICAL.md) • [View Architecture](#-system-architecture)
 
 <br>
 
@@ -453,7 +453,7 @@ MIT License — Free to use, modify, and distribute.
 <div align="center">
 
 
-![Visitors](https://api.visitorbadge.io/api/visitors?path=mizazhaider-ceh%2FX-Recon&label=Visitors&countColor=%2300f3ff)
+![Visitors](https://api.visitorbadge.io/api/visitors?path=mizazhaider-ceh%2FSentinel-Copilot-S2&label=Visitors&countColor=%2300f3ff)
 
 </div>
 
